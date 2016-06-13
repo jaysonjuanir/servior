@@ -10,9 +10,6 @@
 	
   	<groupId>com.person</groupId>
   	<artifactId>dao</artifactId>
-  	<packaging>jar</packaging>
-  	<name>dao</name>
-  	<url>http://maven.apache.org</url>
   	<dependencies>
   		<dependency>
 			<groupId>junit</groupId>

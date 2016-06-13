@@ -9,7 +9,6 @@
 	
   <groupId>com.person</groupId>
   <artifactId>model</artifactId>
-  <packaging>jar</packaging>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

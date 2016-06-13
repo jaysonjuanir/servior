@@ -1,0 +1,20 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- one such mapping can contain multiple entity mappings in the same package -->
+<hibernate-mapping package="DeepSleep">
+
+	<!-- Book-entity mapping -->
+    <class name="Person" table="person">
+        <id name="person_id" type="int" column="person_id">
+      		<generator class="identity"/>
+    	</id>
+        <property name="person_last_name" column="person_last_name" type="string"/>
+    	<property name="person_middle_name" column="person_middle_name" type="string"/>
+		<property name="person_first_name" column="person_first_name" type="string"/>
+		<property name="person_suffix" column="person_suffix" type="string"/>
+		<property name="person_title" column="person_title" type="string"/>
+    </class>
+
+</hibernate-mapping>
