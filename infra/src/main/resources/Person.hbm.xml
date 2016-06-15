@@ -6,7 +6,7 @@
 <hibernate-mapping package="DeepSleep">
 
 	<!-- Book-entity mapping -->
-    <class name="Person" table="person">
+    <class name="com.person.model.Person" table="person">
         <id name="person_id" type="int" column="person_id">
       		<generator class="identity"/>
     	</id>
