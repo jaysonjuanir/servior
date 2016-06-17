@@ -21,9 +21,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.person</groupId>
-			<artifactId>infra</artifactId>
+			<artifactId>service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.person</groupId>
+			<artifactId>infra</artifactId>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>

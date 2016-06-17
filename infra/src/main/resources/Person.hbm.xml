@@ -15,6 +15,22 @@
 		<property name="person_first_name" column="person_first_name" type="string"/>
 		<property name="person_suffix" column="person_suffix" type="string"/>
 		<property name="person_title" column="person_title" type="string"/>
+		<property name="person_GWA" column="gwa" type="double"/>
+		<many-to-one name="address" column="address_id" unique="true" class="com.person.model.Address" not-null="true" cascade="all"/>
+		<!--<component
+        	name="address"
+        	class="com.person.model.Address"
+        	access="field">
+    		<!  <property name="address_id" column="address_id" type="int" access="field" /> 
+			<many-to-one name="address_id" column="address_id" access="field" unique="true" class="com.person.model.Address" not-null="true" cascade="all"/>
+		</component> -->
+		<!--<dynamic-component name="address">
+			<many-to-one name="address_id" class="com.person.model.Address" column="address_id"/>
+		</dynamic-component> -->
+		<!--<component name="address" class="com.person.model.Address" >
+			<many-to-one class="com.person.model.Address" name="address_id" >
+				<column name="address_id" precision="9" scale="0"/>
+			</many-to-one>
+		</component> -->
     </class>
-
 </hibernate-mapping>

@@ -10,6 +10,8 @@ import com.person.model.Person;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.Query;
+import org.hibernate.criterion.Order;
 import java.util.List;
 import java.util.ArrayList;
 public class PersonDao
@@ -26,6 +28,7 @@ public class PersonDao
 		session.beginTransaction();
 		session.save(person);
 		session.getTransaction().commit();
+		session.close();
 	}
 	public List<Person> getAllPerson(){
 		//UtilSession utilSession = new UtilSession();
@@ -38,9 +41,9 @@ public class PersonDao
 		}catch(HibernateException hex){
 			hex.printStackTrace();
 		}finally{
-			//session.close();
+			session.close();
 		}
-		session.close();
+		//session.close();
 		return persons;
 	}
 	public void updatePerson(Person person){
@@ -67,11 +70,55 @@ public class PersonDao
 			if(transac!=null)
 				transac.rollback();
 			hex.printStackTrace();
+		}finally{
+			session.close();
 		}
+	}
+	public List<Person> getPersonByLastName(){
+		List<Person> people = new ArrayList<>();
+		session = UtilSession.getSessionFactory().openSession();
+		Transaction tx = null;
+		try{
+			//tx = session.beginTransaction();
+			//String hql = "FROM com.person.model.Person ORDER BY person_last_name";
+			//Query query = session.createQuery(hql);
+			//query.setParameter("id",1);
+			
+			people = session.createCriteria(Person.class).addOrder( Order.asc("person_last_name") ).list();
+			System.out.println(people);
+			//people = query.list();
+		}catch(RuntimeException e){
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return people;
+	}
+	public List<Person> getPersonByGWA(){
+		List<Person> people = new ArrayList<>();
+		session = UtilSession.getSessionFactory().openSession();
+		Transaction tx = null;
+		try{
+			/*tx = session.beginTransaction();
+			String hql = "from person where gwa = :gwa";
+			Query query = session.createQuery(hql);
+			query.setParameter("gwa",gwa);
+			persons = query.list();*/
+			people = session.createCriteria(Person.class).addOrder( Order.asc("person_GWA") ).list();
+		}catch(RuntimeException e){
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return people;
 	}
 	public Person getPersonById(int id){
 		session = UtilSession.getSessionFactory().openSession();
 		Person thisPerson = (Person)session.get(Person.class, id);
+		session.close();
 		return thisPerson;
+	}
+	public void closeSessionFactory(){
+		UtilSession.closeSessionFactory();
 	}
 }

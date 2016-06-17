@@ -46,6 +46,18 @@
 				<artifactId>infra</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.person</groupId>
+				<artifactId>service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.person</groupId>
+				<artifactId>dao</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		
+		
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -60,8 +72,7 @@
         <directory>src/main/resources</directory>
         <filtering>false</filtering>
         <includes>
-          <include>**/hibernate.cfg.xml</include>
-          <include>**/Person.hbm.xml</include>
+          <include>**/*.xml</include>
           <include>**/person.sql</include>
         </includes>
       </resource>

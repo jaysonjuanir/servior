@@ -1,0 +1,16 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- one such mapping can contain multiple entity mappings in the same package -->
+<hibernate-mapping package="DeepSleep">
+
+	<!-- Book-entity mapping -->
+    <class name="com.person.model.Roles" table="roles">
+        <id name="role_id" type="int" column="role_id">
+      		<generator class="identity"/>
+    	</id>
+        <property name="role_type" column="role_type" type="string"/>
+    </class>
+
+</hibernate-mapping>
