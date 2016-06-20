@@ -12,34 +12,48 @@ import com.person.dao.RolesDao;
 import com.person.model.Roles;
 
 import com.person.model.Address;
+
+import com.person.dao.ContactDao;
+import com.person.model.Contact;
+
 import com.person.util.UtilSession;
 import java.util.List;
-
+import java.util.Set;
 public class Service
 {
 	public Service(){
 		UtilSession.getSessionFactory();
 	}
     PersonDao p = new PersonDao();
+	ContactDao c = new ContactDao();
 	
 	public void printAllPerson(){
 		List<Person> s = p.getAllPerson();
-		s.forEach(System.out::println);
+		s.forEach((people) ->{
+			System.out.print(people);
+			people.getPerson_contact().forEach(System.out::println);
+			System.out.println();
+			people.getRoles().forEach(System.out::println);
+			System.out.println();
+		});
 	}
 	
 	//Person newPerson = new Person("a", "b", "c", "d", "e");
 	public void executeCreatePerson(Person newPerson){
 		p.addPerson(newPerson);
-		System.out.println("PERSON CREATED!!");
+		
 	}
 	public void executeUpdatedPerson(Person updatedPerson){
 		p.updatePerson(updatedPerson);
-		System.out.println("PERSON UPDATED!");
+		
 	}
-	
+	public void executeCreatedPersonContact(Contact contact){
+		c.addContact(contact);
+		System.out.println("CONTACT CREATED!");
+	}
 	public void deletePerson(Person deletePerson){
 		p.deletePerson(deletePerson);
-		System.out.println("PERSON DELETED!!");
+		
 	}
 	public Person getPersonById(int personId){
 		return p.getPersonById(personId);
@@ -47,7 +61,13 @@ public class Service
 	public Address createAddress(String streetNumber, String barangay, String city, String zipCode){
 		return new Address(streetNumber, barangay, city, zipCode);
 	}
-	public Person updatePerson(Person tbUpdatePerson, String firstName, String middleName, String lastName, String suffix, String title, double gwa){
+	public Contact createContact(String type, String value){
+		Contact contact = new Contact();
+		contact.setContact_type(type);
+		contact.setContact_value(value);
+		return contact;
+	}
+	public Person updatePerson(Person tbUpdatePerson, String firstName, String middleName, String lastName, String suffix, String title, double gwa, Address address){
 		Person updatedPerson = tbUpdatePerson;
 		if(!firstName.equals(""))//validation if empty
 			updatedPerson.setPerson_first_name(firstName);
@@ -60,7 +80,20 @@ public class Service
 		if(!title.equals(""))
 			updatedPerson.setPerson_title(title);
 		updatedPerson.setPerson_GWA(gwa);
+		updatedPerson.setAddress(address);
 		return updatedPerson;
+	}
+	public Address updateAddress(Address tbUpdateAddress, String streetNumber, String barangay, String city, String zipcode){
+		Address updatedAddress = tbUpdateAddress;
+		if(!streetNumber.equals(""))
+			updatedAddress.setAddress_street_number(streetNumber);
+		if(!barangay.equals(""))
+			updatedAddress.setAddress_barangay(barangay);
+		if(!city.equals(""))
+			updatedAddress.setAddress_city(city);
+		if(!zipcode.equals(""))
+			updatedAddress.setAddress_zipcode(zipcode);
+		return updatedAddress;
 	}
 	public List<Person> getPersonByLastName(){
 		return p.getPersonByLastName();
@@ -69,8 +102,32 @@ public class Service
 		return p.getPersonByGWA();
 	}
 	
-	
-	
+	public List<Contact> getContactByPersonId(int personId){
+		Person person = p.getPersonById(personId);
+		return c.getContactByPerson(person);
+	}
+	public Contact getContactById(int contact_id){
+		return c.getContactById(contact_id);
+	}
+	public Contact createContact(String type, String value, Person personContact){
+		return new Contact(type, value, personContact);
+	}
+	public void deleteContact(Contact contact){
+		c.deleteContact(contact);
+		System.out.println("DELETE CONTACT!");
+	}
+	public void executeCreateContact(Contact createdContact){
+		c.addContact(createdContact);
+		System.out.println("CONTACT ADDED!");
+	}
+	public void executeUpdateContact(Contact updatedContact){
+		//p.updatePersonContact(personId, updatedContact);
+		c.updateContact(updatedContact);
+		System.out.println("CONTACT UPDATED!");
+	}
+	//
+	//FOR CONTACTS!!
+	//
 	
 	//-----------------------------ROLES--------------------------------------------------------
 	RolesDao r = new RolesDao(); 

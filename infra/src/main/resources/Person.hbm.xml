@@ -17,6 +17,14 @@
 		<property name="person_title" column="person_title" type="string"/>
 		<property name="person_GWA" column="gwa" type="double"/>
 		<many-to-one name="address" column="address_id" unique="true" class="com.person.model.Address" not-null="true" cascade="all"/>
+		<set name="person_contact" inverse="true" cascade="all" lazy="true" fetch="select">
+			<key column="person_id" not-null="true"/>
+			<one-to-many class="com.person.model.Contact"/>
+      	</set>
+		<set name="roles" cascade="save-update" table="personrole">
+			<key column="person_id"/>
+			<many-to-many column="role_id" class="com.person.model.Roles"/>
+      	</set>
 		<!--<component
         	name="address"
         	class="com.person.model.Address"

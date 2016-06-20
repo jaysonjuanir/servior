@@ -7,6 +7,8 @@ package com.person.model;
 
 import java.text.MessageFormat;
 import com.person.model.Address;
+import com.person.model.Contact;
+import java.util.Set;
 
 public class Person 
 {
@@ -18,10 +20,13 @@ public class Person
 	private String person_title;
 	private Address address;
 	private Double person_gwa;
+	private Set<Contact> contact;
+	private Set<Roles> roles;
+	
 	
 	public Person(){}
 	
-	public Person(String firstName, String middleName, String lastName, String suffix, String title, Address personAddress, double gwa){
+	public Person(String firstName, String middleName, String lastName, String suffix, String title, Address personAddress, double gwa, Set<Contact> contact){
 		person_last_name=lastName;
 		person_middle_name=middleName;
 		person_first_name=firstName;
@@ -29,6 +34,7 @@ public class Person
 		person_title=title;
 		address = personAddress;
 		person_gwa=gwa;
+		this.contact=contact;
 	}
 	public void setPerson_id(int id){
 		person_id = id;
@@ -78,8 +84,21 @@ public class Person
 	public Double getPerson_GWA(){
 		return person_gwa;
 	}
+	public void setPerson_contact(Set<Contact> contact){
+		this.contact=contact;
+	}
+	public Set<Contact> getPerson_contact(){
+		return contact;
+	}
+	public void setRoles(Set<Roles> roles){
+		this.roles=roles;	
+	}
+	public Set<Roles> getRoles(){
+		return roles;
+	}
+	
 	
 	public String toString(){
-		return MessageFormat.format("{0} {1} {2} {3} {4} {5} {6} {7}", this.person_id, this.person_first_name, this.person_middle_name, this.person_last_name, this.person_suffix, this.person_title, this.address, this.person_gwa);
+		return MessageFormat.format("{0} {1} {2} {3} {4} {5} {6} {7} ", this.person_id, this.person_first_name, this.person_middle_name, this.person_last_name, this.person_suffix, this.person_title, this.address, this.person_gwa);
 	}
 }

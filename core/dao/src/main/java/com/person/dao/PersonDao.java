@@ -7,6 +7,7 @@ package com.person.dao;
 
 import com.person.util.UtilSession;
 import com.person.model.Person;
+import com.person.model.Contact;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -28,6 +29,7 @@ public class PersonDao
 		session.beginTransaction();
 		session.save(person);
 		session.getTransaction().commit();
+		System.out.println("PERSON CREATED!!");
 		session.close();
 	}
 	public List<Person> getAllPerson(){
@@ -52,6 +54,7 @@ public class PersonDao
 			transac = session.beginTransaction();
 			session.update(person);
 			transac.commit();
+			System.out.println("PERSON UPDATED!");
 		}catch(HibernateException hex){
 			if(transac!=null)
 				transac.rollback();
@@ -66,6 +69,7 @@ public class PersonDao
 			transac = session.beginTransaction();
 			session.delete(deleteThisPerson);
 			transac.commit();
+			System.out.println("PERSON DELETED!!");
 		}catch(HibernateException hex){
 			if(transac!=null)
 				transac.rollback();
@@ -118,6 +122,7 @@ public class PersonDao
 		session.close();
 		return thisPerson;
 	}
+	
 	public void closeSessionFactory(){
 		UtilSession.closeSessionFactory();
 	}

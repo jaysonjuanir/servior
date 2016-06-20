@@ -31,6 +31,6 @@ public class Roles
 	}
 	
 	public String toString(){
-		return MessageFormat.format("{0} {1} ", this.role_id, this.role_type);
+		return MessageFormat.format("Roles: {0} ", this.role_type);
 	}
 }
