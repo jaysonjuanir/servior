@@ -12,11 +12,15 @@ import com.person.model.Address;
 import com.person.model.Roles;
 import com.person.model.Contact;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.*;
 import java.io.*;
 public class App 
 {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static Scanner sc = new Scanner(System.in);
 	static Service srvc = new Service();
     public static void main( String[] args )
     {
@@ -35,7 +39,7 @@ public class App
 				int choice = Integer.parseInt(br.readLine());
 				switch(choice){
 					case 1:
-						srvc.printAllPerson();
+						temp.listPeople();
 						br.read();
 						break;
 					case 2:
@@ -54,9 +58,13 @@ public class App
 						temp.listPersonByLastNameInput();
 						break;
 					case 7:
+						temp.listPersonByDateHiredInput();
 						break;
 					case 8:
 						temp.addPersonRoles();
+						break;
+					case 9:
+						temp.deletePersonRoles();
 						break;
 					case 10:
 						temp.createPersonContact();
@@ -95,17 +103,23 @@ public class App
 		System.out.println("lol");
 		System.exit(0);
     }
+	public void listPeople(){
+		List <Person> listPeople  = srvc.getPeople();
+		srvc.printAllPeople(listPeople);
+	}
+	public void listPersonByDateHiredInput()throws IOException{
+		
+		List <Person> listPeople  = srvc.getPersonByDateHired();
+		srvc.printAllPeople(listPeople);
+	}
 	public void listPersonByLastNameInput()throws IOException{
-		
 		List <Person> listPeople  = srvc.getPersonByLastName();
-		listPeople.forEach(System.out::println);
-	
-		
+		srvc.printAllPeople(listPeople);
 	}
 	public void listPersonByGWAInput()throws IOException{
 		
 		List<Person> listPeople = srvc.getPersonByGWA();
-		listPeople.forEach(System.out::println);
+		srvc.printAllPeople(listPeople);
 	}
 	public void createPersonInput()throws IOException{
 		try{
@@ -119,19 +133,44 @@ public class App
 			String suffix = br.readLine();
 			System.out.println("Title: ");
 			String title = br.readLine();
+			
+			
+			
+			
+			System.out.println("Birthday [MM/dd/yyyy]: ");
+			Date birthday = new App().personDateInput();
+			
+			boolean isEmployed = false;
+			Date date_hired = null;
+			String input = "";
+			while(!(input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"))){
+				System.out.println("Employed? [Y/n]");
+				input = br.readLine();
+				if(input.equalsIgnoreCase("y")){
+					isEmployed=true;
+					System.out.println("Date Hired [MM/dd/yyyy]:");
+					date_hired = new App().personDateInput();
+				}
+			}
+			
+			
+			
+			
 			Address personAddress = new App().createPersonAddressInput();
 			
 			System.out.println("GWA: ");
 			double gwa = Double.parseDouble(br.readLine());
-			Person createdPerson = new Person(firstName, middleName, lastName, suffix, title, personAddress, gwa, null);
+			
+			Set<Roles> roles = new App().createPersonRole();//
+			
+			Person createdPerson = new Person(firstName, middleName, lastName, suffix, title, personAddress, gwa, null, roles, birthday, date_hired, isEmployed);
 			Set<Contact> contacts = new App().createPersonContacts();
 			contacts.forEach(a->{
 				a.setContact_person(createdPerson);
 			});
 			createdPerson.setPerson_contact(contacts);
 			
-			Set<Roles> roles = new App().createPersonRole();//
-			createdPerson.setRoles(roles);
+			
 			//contacts.forEach(c->{
 			//	srvc.executeCreatedPersonContact(c);
 			//});
@@ -147,11 +186,50 @@ public class App
 			
 		}
 	}
+	public Date personDateInput(){
+		boolean indicator = false;
+		//Date date = null;
+		Scanner sc1 = new Scanner(System.in);
+		String dateInput = "";
+		
+		/*while(!indicator){
+			//sc1.nextLine();
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			sc1.nextLine();
+			System.out.println(!sc1.hasNext("(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])/((19|20)\\d\\d)$"));
+			//sdf.setLenient(false);
+			if(sc1.hasNext("(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])/((19|20)\\d\\d)$")){
+				try{
+					System.out.print("Enter valid date format [MM/dd/yyyy]: ");
+					dateInput=sc1.nextLine();
+					date = sdf.parse(dateInput);
+					indicator=true;
+				}catch(ParseException e){
+					e.printStackTrace();
+				}
+			}
+		}*/
+		while(!sc1.hasNext("(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])/((19|20)\\d\\d)$")){
+			System.out.print("Please enter valid date format [MM/dd/yyyy]: ");
+			sc1.nextLine();
+		}
+		String birthDate = sc1.nextLine();
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = null;
+		try{
+			date = df.parse(birthDate);
+		}catch(ParseException e){
+			e.printStackTrace();
+		}
+		
+		System.out.println(date);
+		return date;
+	}
 	public Set<Roles> createPersonRole() throws IOException{
 		
 		Set<Roles> roles = new HashSet<Roles>();
 		
-		roles.add(new App().createPersonRoleInput());
+		roles.add(new App().selectPersonRoleInput());
 			
 		return roles;
 	}
@@ -160,10 +238,11 @@ public class App
 			System.out.println("Please enter a valid person id: ");
 			int personId = Integer.parseInt(br.readLine());
 			Person person = srvc.getPersonById(personId);
-			
+			System.out.println("Person Found! Name: " +person.getFullName());
+
 			Set<Roles> roles = person.getRoles();
 			
-			roles.add(new App().createPersonRoleInput());
+			roles.add(new App().selectPersonRoleInput());
 			
 			person.setRoles(roles);
 			srvc.executeUpdatedPerson(person);
@@ -173,7 +252,38 @@ public class App
 			
 		}
 	}
-	public Roles createPersonRoleInput()throws IOException{
+	public void deletePersonRoles()throws IOException{
+		try{
+			System.out.println("Please enter a valid person id: ");
+			int personId = Integer.parseInt(br.readLine());
+			Person person = srvc.getPersonById(personId);
+			
+			Set<Roles> roles = person.getRoles();
+			Set<Roles> updatedRoles = new HashSet<Roles>();
+			System.out.println("Begin display of person roles:");
+			System.out.println("Person Found! Name: "+ person.getFullName());
+
+			roles.forEach(System.out::println);
+			Roles role = new App().selectPersonRoleInput();
+				
+			roles.forEach(r->{
+				
+				if( !(r.toString().equals( role.toString())) ){
+					System.out.println(r.toString() + " and " + role.toString());
+					updatedRoles.add(r);	
+				}
+			});
+
+			System.out.println(updatedRoles);
+			
+			
+			person.setRoles(updatedRoles);
+			srvc.executeUpdatedPerson(person);
+		}catch(NumberFormatException|IOException|NullPointerException ex){
+			ex.printStackTrace();
+		}
+	}
+	public Roles selectPersonRoleInput()throws IOException{
 		srvc.printAllRoles();
 		System.out.print("[Enter the id number]Choose role: ");
 		int roleId = Integer.parseInt(br.readLine());
@@ -268,6 +378,26 @@ public class App
 			System.out.println("GWA Update "+tbUpdatePerson.getPerson_GWA()+" : ");
 			double gwa = Double.parseDouble(br.readLine());
 			
+			System.out.println("Birthday Update " +tbUpdatePerson.getBirthday()+"  :");
+			System.out.println("Enter by [MM/dd/yyyy] format: ");
+			Date birthday = new App().personDateInput();
+			//System.out.println("Date Hired Update " +tbUpdatePerson.getDate_hired()+" : ");
+			Date date_hired = null;
+			boolean isEmployed = false;
+			
+			System.out.println("Update Employed? [Current value: "+tbUpdatePerson.getEmployed()+"] : ");
+			String input = "";
+			while(!(input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"))){
+				System.out.println("Employed? [Y/n]");
+				input = br.readLine();
+				if(input.equalsIgnoreCase("y")){
+					isEmployed=true;
+					System.out.println("Date Hired:");
+					System.out.println("Enter by [MM/dd/yyyy] format: ");
+					date_hired = new App().personDateInput();
+				}
+			}
+			
 			Address tbUpdateAddress = tbUpdatePerson.getAddress();
 			String promptUser = "";
 			while(!( promptUser.equalsIgnoreCase("y") || promptUser.equalsIgnoreCase("n") )){
@@ -278,7 +408,7 @@ public class App
 			}
 			
 			
-			Person updatedPerson = srvc.updatePerson(tbUpdatePerson, firstName, middleName, lastName, suffix, title, gwa, tbUpdateAddress);
+			Person updatedPerson = srvc.updatePerson(tbUpdatePerson, firstName, middleName, lastName, suffix, title, gwa, tbUpdateAddress, birthday, date_hired, isEmployed);
 			srvc.executeUpdatedPerson(updatedPerson);
 			
 			
@@ -316,6 +446,7 @@ public class App
 		Set<Contact> contactSet = personContact.getPerson_contact();
 		String promptUser="";
 		while(!promptUser.equalsIgnoreCase("n")){
+			System.out.println("Person Found! Name: " +personContact.getFullName());
 			System.out.println("Continue Updating Contacts? [Y/n]");
 			promptUser = br.readLine();
 			if(promptUser.equalsIgnoreCase("y")){
@@ -431,7 +562,7 @@ public class App
 	public static void printMenu(){
 		System.out.println("==================================");
 		System.out.println("==================================");
-		System.out.println("1. Print the Peoples");
+		System.out.println("1. Print the People");
 		System.out.println("2. Create a Person");
 		System.out.println("3. Delete a Person");
 		System.out.println("4. Update a Person");

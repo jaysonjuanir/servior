@@ -41,10 +41,8 @@ CREATE TABLE contact (
 
 DROP TABLE if EXISTS personrole CASCADE;
 CREATE TABLE personrole (
-    personrole_id bigserial NOT NULL,
     person_id bigint NOT NULL,
     role_id bigint NOT NULL,
-	CONSTRAINT personrole_pkey PRIMARY KEY (personrole_id),
 	CONSTRAINT person_fkey FOREIGN KEY (person_id)
 	REFERENCES person(person_id) MATCH SIMPLE ON DELETE CASCADE
 );

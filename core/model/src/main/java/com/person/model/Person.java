@@ -9,6 +9,7 @@ import java.text.MessageFormat;
 import com.person.model.Address;
 import com.person.model.Contact;
 import java.util.Set;
+import java.util.Date;
 
 public class Person 
 {
@@ -20,13 +21,16 @@ public class Person
 	private String person_title;
 	private Address address;
 	private Double person_gwa;
+	private Date birthday;
+	private boolean isEmployed;
+	private Date date_hired;
 	private Set<Contact> contact;
 	private Set<Roles> roles;
 	
 	
 	public Person(){}
 	
-	public Person(String firstName, String middleName, String lastName, String suffix, String title, Address personAddress, double gwa, Set<Contact> contact){
+	public Person(String firstName, String middleName, String lastName, String suffix, String title, Address personAddress, double gwa, Set<Contact> contact, Set<Roles> roles, Date birthday, Date date_hired, boolean isEmployed){
 		person_last_name=lastName;
 		person_middle_name=middleName;
 		person_first_name=firstName;
@@ -35,6 +39,10 @@ public class Person
 		address = personAddress;
 		person_gwa=gwa;
 		this.contact=contact;
+		this.roles=roles;
+		this.birthday=birthday;
+		this.date_hired=date_hired;
+		this.isEmployed=isEmployed;
 	}
 	public void setPerson_id(int id){
 		person_id = id;
@@ -96,9 +104,30 @@ public class Person
 	public Set<Roles> getRoles(){
 		return roles;
 	}
-	
-	
+	public Date getBirthday(){
+		return this.birthday;
+	}
+
+	public void setBirthday(Date birthday){
+		this.birthday = birthday;
+	}
+	public Date getDate_hired(){
+		return this.date_hired;
+	}
+
+	public void setDate_hired(Date date_hired){
+		this.date_hired = date_hired;
+	}
+	public void setEmployed(boolean employed){
+		isEmployed=employed;
+	}
+	public boolean getEmployed(){
+		return isEmployed;
+	}
+	public String getFullName(){
+		return person_first_name + " " + person_middle_name + " " + person_last_name;
+	}
 	public String toString(){
-		return MessageFormat.format("{0} {1} {2} {3} {4} {5} {6} {7} ", this.person_id, this.person_first_name, this.person_middle_name, this.person_last_name, this.person_suffix, this.person_title, this.address, this.person_gwa);
+		return MessageFormat.format("{0} Name: {1} {2} {3} {4} {5} \n\tAddress: {6} \n\tGWA:{7} \n\tBirthday: {8}\n\tEmployed: {9}\tDate Hired: {10}", this.person_id, this.person_first_name, this.person_middle_name, this.person_last_name, this.person_suffix, this.person_title, this.address, this.person_gwa, this.birthday, this.isEmployed, this.date_hired);
 	}
 }

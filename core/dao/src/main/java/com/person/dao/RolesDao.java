@@ -10,6 +10,7 @@ import com.person.model.Roles;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import java.util.List;
 import java.util.ArrayList;
 public class RolesDao
@@ -33,7 +34,7 @@ public class RolesDao
 		session = UtilSession.getSessionFactory().openSession();
 		List<Roles> roles = null;
 		try{
-			roles = session.createCriteria(Roles.class).list();
+			roles = session.createCriteria(Roles.class).addOrder( Order.asc("role_id") ).list();
 			//session.close();
 			//session.flush();
 		}catch(HibernateException hex){

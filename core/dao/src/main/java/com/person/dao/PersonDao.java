@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.Query;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import java.util.List;
 import java.util.ArrayList;
 public class PersonDao
@@ -32,7 +33,7 @@ public class PersonDao
 		System.out.println("PERSON CREATED!!");
 		session.close();
 	}
-	public List<Person> getAllPerson(){
+	public List<Person> getPeople(){
 		//UtilSession utilSession = new UtilSession();
 		session = UtilSession.getSessionFactory().openSession();
 		List<Person> persons = null;
@@ -89,7 +90,6 @@ public class PersonDao
 			//query.setParameter("id",1);
 			
 			people = session.createCriteria(Person.class).addOrder( Order.asc("person_last_name") ).list();
-			System.out.println(people);
 			//people = query.list();
 		}catch(RuntimeException e){
 			e.printStackTrace();
@@ -109,6 +109,24 @@ public class PersonDao
 			query.setParameter("gwa",gwa);
 			persons = query.list();*/
 			people = session.createCriteria(Person.class).addOrder( Order.asc("person_GWA") ).list();
+		}catch(RuntimeException e){
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return people;
+	}
+	public List<Person> getPersonByDateHired(){
+		List<Person> people = new ArrayList<>();
+		session = UtilSession.getSessionFactory().openSession();
+		Transaction tx = null;
+		try{
+			/*tx = session.beginTransaction();
+			String hql = "from person where gwa = :gwa";
+			Query query = session.createQuery(hql);
+			query.setParameter("gwa",gwa);
+			persons = query.list();*/
+			people = session.createCriteria(Person.class).addOrder( Order.asc("date_hired") ).add( Restrictions.isNotNull("date_hired") ).list();
 		}catch(RuntimeException e){
 			e.printStackTrace();
 		}finally{

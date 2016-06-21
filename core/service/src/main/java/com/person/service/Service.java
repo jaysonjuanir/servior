@@ -19,6 +19,7 @@ import com.person.model.Contact;
 import com.person.util.UtilSession;
 import java.util.List;
 import java.util.Set;
+import java.util.Date;
 public class Service
 {
 	public Service(){
@@ -27,13 +28,12 @@ public class Service
     PersonDao p = new PersonDao();
 	ContactDao c = new ContactDao();
 	
-	public void printAllPerson(){
-		List<Person> s = p.getAllPerson();
-		s.forEach((people) ->{
-			System.out.print(people);
-			people.getPerson_contact().forEach(System.out::println);
+	public void printAllPeople(List<Person> people){
+		people.forEach((p) ->{
+			System.out.println(p);
+			p.getPerson_contact().forEach(System.out::println);
 			System.out.println();
-			people.getRoles().forEach(System.out::println);
+			p.getRoles().forEach(System.out::println);
 			System.out.println();
 		});
 	}
@@ -67,7 +67,7 @@ public class Service
 		contact.setContact_value(value);
 		return contact;
 	}
-	public Person updatePerson(Person tbUpdatePerson, String firstName, String middleName, String lastName, String suffix, String title, double gwa, Address address){
+	public Person updatePerson(Person tbUpdatePerson, String firstName, String middleName, String lastName, String suffix, String title, double gwa, Address address, Date birthday, Date date_hired, boolean employed){
 		Person updatedPerson = tbUpdatePerson;
 		if(!firstName.equals(""))//validation if empty
 			updatedPerson.setPerson_first_name(firstName);
@@ -80,6 +80,9 @@ public class Service
 		if(!title.equals(""))
 			updatedPerson.setPerson_title(title);
 		updatedPerson.setPerson_GWA(gwa);
+		updatedPerson.setBirthday(birthday);
+		updatedPerson.setDate_hired(date_hired);
+		updatedPerson.setEmployed(employed);
 		updatedPerson.setAddress(address);
 		return updatedPerson;
 	}
@@ -100,6 +103,12 @@ public class Service
 	}
 	public List<Person> getPersonByGWA(){
 		return p.getPersonByGWA();
+	}
+	public List<Person> getPersonByDateHired(){
+		return p.getPersonByDateHired();
+	}
+	public List<Person> getPeople(){
+		return p.getPeople();
 	}
 	
 	public List<Contact> getContactByPersonId(int personId){

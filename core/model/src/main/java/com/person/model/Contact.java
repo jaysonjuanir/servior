@@ -46,6 +46,6 @@ public class Contact{
 		return person;
 	}
 	public String toString(){
-		return MessageFormat.format("\n\tContacts: {0} = {1} ", this.contact_type, this.contact_value);
+		return MessageFormat.format("\tContacts: {0} = {1} ", this.contact_type, this.contact_value);
 	}
 }
