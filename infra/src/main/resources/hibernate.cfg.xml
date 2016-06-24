@@ -18,7 +18,6 @@
 		<mapping resource="Address.hbm.xml"/>
 		<mapping resource="Roles.hbm.xml"/>
 		<mapping resource="Contact.hbm.xml"/>
-		
 
     </session-factory>
 

@@ -44,7 +44,10 @@ CREATE TABLE personrole (
     person_id bigint NOT NULL,
     role_id bigint NOT NULL,
 	CONSTRAINT person_fkey FOREIGN KEY (person_id)
-	REFERENCES person(person_id) MATCH SIMPLE ON DELETE CASCADE
+	REFERENCES person(person_id) MATCH SIMPLE ON DELETE CASCADE,
+	CONSTRAINT role_fkey FOREIGN KEY (role_id)
+	REFERENCES roles(role_id) MATCH SIMPLE ON DELETE CASCADE
+	
 );
 
 DROP TABLE if EXISTS roles CASCADE;

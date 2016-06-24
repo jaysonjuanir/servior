@@ -52,13 +52,13 @@ public class App
 						temp.updatePersonInput();
 						break;
 					case 5:
-						temp.listPersonByGWAInput();
+						temp.listPeopleByGWAInput();
 						break;
 					case 6:
-						temp.listPersonByLastNameInput();
+						temp.listPeopleByLastNameInput();
 						break;
 					case 7:
-						temp.listPersonByDateHiredInput();
+						temp.listPeopleByDateHiredInput();
 						break;
 					case 8:
 						temp.addPersonRoles();
@@ -107,16 +107,15 @@ public class App
 		List <Person> listPeople  = srvc.getPeople();
 		srvc.printAllPeople(listPeople);
 	}
-	public void listPersonByDateHiredInput()throws IOException{
-		
+	public void listPeopleByDateHiredInput()throws IOException{
 		List <Person> listPeople  = srvc.getPersonByDateHired();
 		srvc.printAllPeople(listPeople);
 	}
-	public void listPersonByLastNameInput()throws IOException{
+	public void listPeopleByLastNameInput()throws IOException{
 		List <Person> listPeople  = srvc.getPersonByLastName();
 		srvc.printAllPeople(listPeople);
 	}
-	public void listPersonByGWAInput()throws IOException{
+	public void listPeopleByGWAInput()throws IOException{
 		
 		List<Person> listPeople = srvc.getPersonByGWA();
 		srvc.printAllPeople(listPeople);
@@ -143,6 +142,7 @@ public class App
 			boolean isEmployed = false;
 			Date date_hired = null;
 			String input = "";
+			Set<Roles> roles =null;
 			while(!(input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"))){
 				System.out.println("Employed? [Y/n]");
 				input = br.readLine();
@@ -150,6 +150,7 @@ public class App
 					isEmployed=true;
 					System.out.println("Date Hired [MM/dd/yyyy]:");
 					date_hired = new App().personDateInput();
+					roles = new App().createPersonRole();//
 				}
 			}
 			
@@ -161,7 +162,7 @@ public class App
 			System.out.println("GWA: ");
 			double gwa = Double.parseDouble(br.readLine());
 			
-			Set<Roles> roles = new App().createPersonRole();//
+			
 			
 			Person createdPerson = new Person(firstName, middleName, lastName, suffix, title, personAddress, gwa, null, roles, birthday, date_hired, isEmployed);
 			Set<Contact> contacts = new App().createPersonContacts();
@@ -240,12 +241,17 @@ public class App
 			Person person = srvc.getPersonById(personId);
 			System.out.println("Person Found! Name: " +person.getFullName());
 
-			Set<Roles> roles = person.getRoles();
 			
-			roles.add(new App().selectPersonRoleInput());
-			
-			person.setRoles(roles);
-			srvc.executeUpdatedPerson(person);
+			if(person.getEmployed()==true){
+				Set<Roles> roles = person.getRoles();
+				roles.add(new App().selectPersonRoleInput());
+
+				person.setRoles(roles);
+				srvc.executeUpdatedPerson(person);
+			}
+			else{
+				System.out.println("PERSON NOT EMPLOYED YET!\n");
+			}
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
 			ex.printStackTrace();
@@ -302,63 +308,6 @@ public class App
 		Address personAddress = srvc.createAddress(streetNumber, barangay, city, zipCode);
 			
 		return personAddress;
-	}
-	public Contact createPersonContactInput()throws IOException{ //for creating person included
-		
-		String type = "";
-		String contactType = "";
-		while(!(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))){
-			System.out.println("Choose Type [Landline(L) Mobile Number(M) E-mail(E)]: {Enter capital of the letter only}" );
-			type = br.readLine();
-			if(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))
-				contactType = type.equalsIgnoreCase("L")?"landline":type.equalsIgnoreCase("M")?"mobile":"email";
-		}
-		System.out.println("Enter Value: ");
-		String value = br.readLine();
-		return srvc.createContact(contactType, value);
-		
-	}
-	public Set<Contact> createPersonContacts()throws IOException{
-		boolean indicator = true;
-		Set<Contact> contacts = new HashSet<Contact>();
-		while(indicator){
-			contacts.add(new App().createPersonContactInput());
-			System.out.println("Add new contact? [Y/n]");
-			String choice = br.readLine();
-			if(choice.equalsIgnoreCase("N"))
-				indicator=false;
-		}
-		
-		return contacts;
-	}
-	public void createPersonContact(){
-		try{
-			System.out.println("Please enter a valid person id: ");
-			int personId = Integer.parseInt(br.readLine());
-			Person personContact = srvc.getPersonById(personId);
-			
-			String type = "";
-			String contactType = "";
-			String value = "";
-			personContact.getPerson_contact().forEach(c->{System.out.println("Contact ID: "+c.getContact_id() + " " + c);});
-			try{
-				type = br.readLine();
-				while(!(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))){
-					System.out.println("Choose Type [Landline(L) Mobile Number(M) E-mail(E)]: {Enter capital of the letter only}" );
-					type = br.readLine();
-					if(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))
-						contactType = type.equalsIgnoreCase("L")?"landline":type.equalsIgnoreCase("M")?"mobile":"email";
-				}
-				System.out.println("Enter "+contactType+" value: ");
-				value = br.readLine();
-				Contact contact = srvc.createContact(contactType, value, personContact);
-				srvc.executeCreateContact(contact);
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}
-		}catch(NumberFormatException|IOException|NullPointerException ex){
-			ex.printStackTrace();
-		}
 	}
 	public void updatePersonInput()throws IOException{
 		try{
@@ -439,6 +388,65 @@ public class App
 		}
 		return updatedAddress;
 	}
+	
+	public Contact createPersonContactInput()throws IOException{ //for creating person included
+		
+		String type = "";
+		String contactType = "";
+		while(!(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))){
+			System.out.println("Choose Type [Landline(L) Mobile Number(M) E-mail(E)]: {Enter capital of the letter only}" );
+			type = br.readLine();
+			if(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))
+				contactType = type.equalsIgnoreCase("L")?"landline":type.equalsIgnoreCase("M")?"mobile":"email";
+		}
+		System.out.println("Enter Value: ");
+		String value = br.readLine();
+		return srvc.createContact(contactType, value);
+		
+	}
+	public Set<Contact> createPersonContacts()throws IOException{
+		boolean indicator = true;
+		Set<Contact> contacts = new HashSet<Contact>();
+		while(indicator){
+			contacts.add(new App().createPersonContactInput());
+			System.out.println("Add new contact? [Y/n]");
+			String choice = br.readLine();
+			if(choice.equalsIgnoreCase("N"))
+				indicator=false;
+		}
+		
+		return contacts;
+	}
+	public void createPersonContact(){
+		try{
+			System.out.println("Please enter a valid person id: ");
+			int personId = Integer.parseInt(br.readLine());
+			Person personContact = srvc.getPersonById(personId);
+			
+			String type = "";
+			String contactType = "";
+			String value = "";
+			personContact.getPerson_contact().forEach(c->{System.out.println("Contact ID: "+c.getContact_id() + " " + c);});
+			try{
+				type = br.readLine();
+				while(!(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))){
+					System.out.println("Choose Type [Landline(L) Mobile Number(M) E-mail(E)]: {Enter capital of the letter only}" );
+					type = br.readLine();
+					if(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))
+						contactType = type.equalsIgnoreCase("L")?"landline":type.equalsIgnoreCase("M")?"mobile":"email";
+				}
+				System.out.println("Enter "+contactType+" value: ");
+				value = br.readLine();
+				Contact contact = srvc.createContact(contactType, value, personContact);
+				srvc.executeCreateContact(contact);
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}catch(NumberFormatException|IOException|NullPointerException ex){
+			ex.printStackTrace();
+		}
+	}
+	
 	public void updateContactsInput()throws IOException{
 		System.out.println("Please enter a valid person id: ");
 		int personId = Integer.parseInt(br.readLine());
