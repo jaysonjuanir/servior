@@ -23,7 +23,7 @@ import java.util.Date;
 public class Service
 {
 	public Service(){
-		UtilSession.getSessionFactory();
+		new UtilSession();
 	}
     PersonDao p = new PersonDao();
 	ContactDao c = new ContactDao();

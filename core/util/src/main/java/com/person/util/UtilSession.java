@@ -16,12 +16,13 @@ public class UtilSession
     static SessionFactory factory;
 	
 	public UtilSession(){
-	}
-	
-	public static SessionFactory getSessionFactory(){
 		configuration = new Configuration().configure();
 		builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
     	factory = configuration.buildSessionFactory(builder.build());
+	}
+	
+	public static SessionFactory getSessionFactory(){
+		
 		return factory;
 	}
 	public static void closeSessionFactory(){

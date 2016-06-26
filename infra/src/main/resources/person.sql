@@ -1,13 +1,3 @@
-DROP TABLE if EXISTS address CASCADE;
-CREATE TABLE address (
-    address_id bigserial NOT NULL,
-    address_street_number varchar(250) NOT NULL,
-    address_barangay varchar(250) NOT NULL,
-    address_city varchar(250) NOT NULL,
-    address_zipcode varchar(250) NOT NULL,
-	CONSTRAINT address_pkey PRIMARY KEY (address_id)
-);
-
 DROP TABLE if EXISTS person CASCADE;
 CREATE TABLE person (
     person_id bigserial NOT NULL,
@@ -17,15 +7,14 @@ CREATE TABLE person (
     person_suffix varchar(250),
     person_title varchar(250),
 	gwa real,
-	address_id bigint NOT NULL,
 	person_birthday date,
 	person_date_hired date,
 	person_employed boolean,
-	CONSTRAINT person_pkey PRIMARY KEY (person_id),
-	CONSTRAINT address_fkey FOREIGN KEY (address_id)
-    REFERENCES address (address_id) MATCH SIMPLE
-    ON UPDATE NO ACTION ON DELETE NO ACTION,
-  	CONSTRAINT address_akey UNIQUE (address_id)
+	address_street_number varchar(250) NOT NULL,
+    address_barangay varchar(250) NOT NULL,
+    address_city varchar(250) NOT NULL,
+    address_zipcode varchar(250) NOT NULL,
+	CONSTRAINT person_pkey PRIMARY KEY (person_id)
 );
 
 DROP TABLE if EXISTS contact CASCADE;
@@ -55,28 +44,4 @@ CREATE TABLE roles (
     role_id bigserial NOT NULL,
     role_type varchar(250) NOT NULL,
 	CONSTRAINT role_pkey PRIMARY KEY (role_id)
-);
-
-
-
- CONSTRAINT person_pkey PRIMARY KEY (id),
-  CONSTRAINT address_fkey FOREIGN KEY (address_id)
-      REFERENCES address (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT address_akey UNIQUE (address_id)
-
-
-CREATE TABLE test1(
-	id bigserial NOT NULL, 
-	name character varying(255), 
-	CONSTRAINT test_pkey PRIMARY KEY (id)
-);
-
-CREATE TABLE test2(
-	id bigserial NOT NULL, 
-	name character varying(255), 
-	test_id bigint, 
-	CONSTRAINT test2_pkey PRIMARY KEY (id), 
-	CONSTRAINT test1_fkey FOREIGN KEY (test_id) 
-	REFERENCES test1(id) MATCH SIMPLE ON DELETE CASCADE
 );
