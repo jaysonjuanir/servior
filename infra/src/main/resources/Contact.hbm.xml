@@ -7,6 +7,7 @@
 
 	<!-- Book-entity mapping -->
     <class name="com.person.model.Contact" table="contact">
+		<cache usage="read-write"/>
         <id name="contact_id" type="int" column="contact_id">
       		<generator class="identity"/>
     	</id>

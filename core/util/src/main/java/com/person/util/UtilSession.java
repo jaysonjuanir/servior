@@ -25,6 +25,10 @@ public class UtilSession
 		
 		return factory;
 	}
+	public static void log(){
+		System.out.println(factory.getStatistics().getEntityFetchCount());   
+		System.out.println(factory.getStatistics().getSecondLevelCacheHitCount());
+	}
 	public static void closeSessionFactory(){
 		factory.close();
 	}

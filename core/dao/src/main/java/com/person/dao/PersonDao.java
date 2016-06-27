@@ -38,9 +38,11 @@ public class PersonDao
 		session = UtilSession.getSessionFactory().openSession();
 		List<Person> persons = null;
 		try{
-			persons = session.createCriteria(Person.class).list();
+			persons = session.createCriteria(Person.class).setCacheable(true).setCacheRegion("person").list()	;
 			//session.close();
 			//session.flush();
+			System.out.println(UtilSession.getSessionFactory().getStatistics().getEntityFetchCount());   
+			System.out.println(UtilSession.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
 		}catch(HibernateException hex){
 			hex.printStackTrace();
 		}finally{
@@ -89,8 +91,8 @@ public class PersonDao
 			//Query query = session.createQuery(hql);
 			//query.setParameter("id",1);
 			
-			people = session.createCriteria(Person.class).addOrder( Order.asc("person_last_name") ).list();
-			//people = query.list();
+			people = session.createCriteria(Person.class).addOrder( Order.asc("person_last_name") ).setCacheable(true).setCacheRegion("person").list();
+			//people = query.setCacheable(true).list();
 		}catch(RuntimeException e){
 			e.printStackTrace();
 		}finally{
@@ -107,8 +109,8 @@ public class PersonDao
 			String hql = "from person where gwa = :gwa";
 			Query query = session.createQuery(hql);
 			query.setParameter("gwa",gwa);
-			persons = query.list();*/
-			people = session.createCriteria(Person.class).addOrder( Order.asc("person_GWA") ).list();
+			persons = query.setCacheable(true).list();*/
+			people = session.createCriteria(Person.class).addOrder( Order.asc("person_GWA") ).setCacheable(true).setCacheRegion("person").list();
 		}catch(RuntimeException e){
 			e.printStackTrace();
 		}finally{
@@ -125,8 +127,8 @@ public class PersonDao
 			String hql = "from person where gwa = :gwa";
 			Query query = session.createQuery(hql);
 			query.setParameter("gwa",gwa);
-			persons = query.list();*/
-			people = session.createCriteria(Person.class).addOrder( Order.asc("date_hired") ).add( Restrictions.isNotNull("date_hired") ).list();
+			persons = query.setCacheable(true).list();*/
+			people = session.createCriteria(Person.class).addOrder( Order.asc("date_hired") ).add( Restrictions.isNotNull("date_hired") ).setCacheable(true).setCacheRegion("person").list();
 		}catch(RuntimeException e){
 			e.printStackTrace();
 		}finally{

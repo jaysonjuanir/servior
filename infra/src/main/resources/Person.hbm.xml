@@ -7,6 +7,7 @@
 
 	<!-- Book-entity mapping -->
     <class name="com.person.model.Person" table="person">
+		<cache usage="read-write"/>
         <id name="person_id" type="int" column="person_id">
       		<generator class="identity"/>
     	</id>
@@ -21,10 +22,12 @@
     	<property name="employed" column="person_employed" type="boolean"/>
 		<!--<many-to-one name="address" column="address_id" unique="true" class="com.person.model.Address" not-null="true" cascade="all"/>-->
 		<set name="person_contact" inverse="true" cascade="all" lazy="true" fetch="select">
+			<cache usage="read-write"/>
 			<key column="person_id" not-null="true"/>
 			<one-to-many class="com.person.model.Contact"/>
       	</set>
 		<set name="roles" cascade="save-update" table="personrole">
+			<cache usage="read-write"/>
 			<key column="person_id"/>
 			<many-to-many column="role_id" class="com.person.model.Roles"/>
       	</set>

@@ -53,7 +53,7 @@ public class ContactDao
 		List<Contact> contacts = null;
 		Integer id = person.getPerson_id();
 		try{
-			contacts = session.createCriteria(Contact.class).add(Restrictions.like("person_id", id)).list();
+			contacts = session.createCriteria(Contact.class).add(Restrictions.like("person_id", id)).setCacheable(true).list();
 			//session.close();
 			//session.flush();
 		}catch(HibernateException hex){

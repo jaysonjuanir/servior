@@ -7,6 +7,7 @@
 
 	<!-- Book-entity mapping -->
     <class name="com.person.model.Roles" table="roles">
+		<cache usage="read-write"/>
         <id name="role_id" type="int" column="role_id">
       		<generator class="identity"/>
     	</id>

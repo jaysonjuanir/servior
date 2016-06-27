@@ -40,7 +40,6 @@ public class App
 				switch(choice){
 					case 1:
 						temp.listPeople();
-						br.read();
 						break;
 					case 2:
 						temp.createPersonInput();
@@ -180,7 +179,6 @@ public class App
 			
 			srvc.executeCreatePerson(createdPerson);
 			
-			br.read();
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
 			ex.printStackTrace();
@@ -362,7 +360,6 @@ public class App
 			
 			
 			
-			br.read();
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
 			ex.printStackTrace();
@@ -516,7 +513,6 @@ public class App
 			int personId = Integer.parseInt(br.readLine());
 			Person tbDeletePerson = srvc.getPersonById(personId);
 			srvc.deletePerson(tbDeletePerson);
-			br.read();
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
 			ex.printStackTrace();
@@ -530,7 +526,6 @@ public class App
 			String roleType = br.readLine();
 			Roles createdRole = new Roles(roleType); //refactor this later!
 			srvc.executeCreateRole(createdRole);
-			br.read();
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
 			ex.printStackTrace();
@@ -546,7 +541,6 @@ public class App
 			String type = br.readLine();
 			Roles updatedRole = srvc.updateRole(tbUpdateRole, type);
 			srvc.executeUpdatedRole(updatedRole);
-			br.read();
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
 			ex.printStackTrace();
@@ -559,7 +553,6 @@ public class App
 			int roleId = Integer.parseInt(br.readLine());
 			Roles tbDeleteRole = srvc.getRoleById(roleId);
 			srvc.deleteRole(tbDeleteRole);
-			br.read();
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
 			ex.printStackTrace();

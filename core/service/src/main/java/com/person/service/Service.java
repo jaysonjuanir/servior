@@ -29,13 +29,14 @@ public class Service
 	ContactDao c = new ContactDao();
 	
 	public void printAllPeople(List<Person> people){
-		people.forEach((p) ->{
-			System.out.println(p);
-			p.getPerson_contact().forEach(System.out::println);
+		people.forEach((ppl) ->{
+			System.out.println(ppl);
+			ppl.getPerson_contact().forEach(System.out::println);
 			System.out.println();
-			p.getRoles().forEach(System.out::println);
+			ppl.getRoles().forEach(System.out::println);
 			System.out.println();
 		});
+		UtilSession.log();
 	}
 	
 	//Person newPerson = new Person("a", "b", "c", "d", "e");
