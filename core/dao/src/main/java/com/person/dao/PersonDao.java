@@ -110,7 +110,7 @@ public class PersonDao
 			Query query = session.createQuery(hql);
 			query.setParameter("gwa",gwa);
 			persons = query.setCacheable(true).list();*/
-			people = session.createCriteria(Person.class).addOrder( Order.asc("person_GWA") ).setCacheable(true).setCacheRegion("person").list();
+			people = session.createCriteria(Person.class).addOrder( Order.asc("person_gwa") ).setCacheable(true).setCacheRegion("person").list();
 		}catch(RuntimeException e){
 			e.printStackTrace();
 		}finally{

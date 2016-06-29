@@ -13,5 +13,9 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.person</groupId>
+      <artifactId>model</artifactId>
+    </dependency>
   </dependencies>
 </project>

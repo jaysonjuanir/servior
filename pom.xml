@@ -27,6 +27,11 @@
 				<version>4.3.10.Final</version>
 			</dependency>
 			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-annotations</artifactId>
+				<version>3.5.6-Final</version>
+			</dependency>
+			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
 				<version>9.4-1206-jdbc42</version>
@@ -77,7 +82,8 @@
         <directory>src/main/resources</directory>
         <filtering>false</filtering>
         <includes>
-          <include>**/*.xml</include>
+          <!--<include>**/*.xml</include>-->
+		  <include>**/ehcache.xml</include>
           <include>**/person.sql</include>
         </includes>
       </resource>
