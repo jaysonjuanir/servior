@@ -15,14 +15,7 @@ import com.person.model.*;
 
 public class UtilSession 
 {
-    private static AnnotationConfiguration configuration;
-	static StandardServiceRegistryBuilder builder;
-    static SessionFactory factory;
-	static Configuration cfg;
-	
-	public UtilSession(){
-		//configuration = new Configuration().configure();
-		cfg = new AnnotationConfiguration()
+    private static AnnotationConfiguration cfg = new AnnotationConfiguration()
 			.addAnnotatedClass(com.person.model.Contact.class)
 			.addAnnotatedClass(com.person.model.Roles.class)
 			.addAnnotatedClass(com.person.model.Person.class)
@@ -37,9 +30,12 @@ public class UtilSession
 			.setProperty("hibernate.enable_lazy_load_no_trans","true")
 			.setProperty("hibernate.show_sql","true")
 			.setProperty("hibernate.cache.region.factory_class","org.hibernate.cache.ehcache.EhCacheRegionFactory")
-			;
-		builder = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties());
-    	factory = cfg.buildSessionFactory(builder.build());
+			;;
+	private static StandardServiceRegistryBuilder builder= new StandardServiceRegistryBuilder().applySettings(cfg.getProperties());;
+    private static SessionFactory factory = cfg.buildSessionFactory(builder.build());
+	
+	
+	public UtilSession(){
 	}
 	
 	public static SessionFactory getSessionFactory(){

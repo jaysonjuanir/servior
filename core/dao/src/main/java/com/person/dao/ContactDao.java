@@ -51,7 +51,7 @@ public class ContactDao
 		//UtilSession utilSession = new UtilSession();
 		session = UtilSession.getSessionFactory().openSession();
 		List<Contact> contacts = null;
-		Integer id = person.getPerson_id();
+		Integer id = person.getId();
 		try{
 			contacts = session.createCriteria(Contact.class).add(Restrictions.like("person_id", id)).setCacheable(true).list();
 			//session.close();

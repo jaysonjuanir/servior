@@ -34,6 +34,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.person</groupId>
+				<artifactId>dto</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
 				<version>4.3.10.Final</version>
@@ -51,5 +56,6 @@
     <module>dao</module>
     <module>model</module>
     <module>util</module>
+    <module>dto</module>
   </modules>
 </project>

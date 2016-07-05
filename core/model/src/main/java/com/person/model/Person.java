@@ -6,14 +6,14 @@ package com.person.model;
  */
 
 import java.text.MessageFormat;
-import com.person.model.Address;
-import com.person.model.Contact;
 import java.util.Set;
 import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -35,27 +35,16 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region="person")
 @Table(name="person")
-public class Person 
+public class Person extends BaseEntity 
 {
-	@Id
-	@GeneratedValue(strategy=IDENTITY)
-	@Column(name = "person_id", unique=true, nullable=false)
-    private int person_id;
 	
-	@Column(name = "person_last_name")
-	private String person_last_name;
 	
-	@Column(name = "person_middle_name")
-	private String person_middle_name;
+	@Embedded
+	private Name name;
 	
-	@Column(name = "person_first_name")
-	private String person_first_name;
-	
-	@Column(name = "person_suffix")
-	private String person_suffix;
-	
-	@Column(name = "person_title")
-	private String person_title;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "gender")
+	private Gender gender;
 	
 	@Embedded
 	private Address address;
@@ -77,21 +66,16 @@ public class Person
 	private Set<Contact> contact;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "personrole", joinColumns = { 
-			@JoinColumn(name = "person_id", nullable = false, updatable = false) }, 
-			inverseJoinColumns = { @JoinColumn(name = "role_id", 
-					nullable = false, updatable = false) })
+	@JoinTable(name = "personrole", 
+		joinColumns = {@JoinColumn(name = "person_id", nullable = false, updatable = false) }, 
+		inverseJoinColumns = { @JoinColumn(name = "role_id", nullable = false, updatable = false) })
 	private Set<Roles> roles;
 	
 	
 	public Person(){}
 	
-	public Person(String firstName, String middleName, String lastName, String suffix, String title, Address personAddress, double gwa, Set<Contact> contact, Set<Roles> roles, Date birthday, Date date_hired, boolean isEmployed){
-		person_last_name=lastName;
-		person_middle_name=middleName;
-		person_first_name=firstName;
-		person_suffix=suffix;
-		person_title=title;
+	public Person( Name name, Address personAddress, double gwa, Set<Contact> contact, Set<Roles> roles, Date birthday, Date date_hired, boolean isEmployed){
+		this.name = name;
 		address = personAddress;
 		person_gwa=gwa;
 		this.contact=contact;
@@ -102,46 +86,18 @@ public class Person
 	}
 	
 	
-	public void setPerson_id(int id){
-		person_id = id;
+	public void setName(Name name){
+		this.name=name;
 	}
-	public int getPerson_id(){
-		return person_id;
-	}
-	
-	public void setPerson_last_name(String lastName){
-		person_last_name=lastName;
-	}
-	public String getPerson_last_name(){
-		return person_last_name;
+	public Name getName(){
+		return this.name;
 	}
 	
-	public void setPerson_middle_name(String middleName){
-		person_middle_name=middleName;
+	public Gender getGender(){
+		return gender;
 	}
-	public String getPerson_middle_name(){
-		return person_middle_name;
-	}
-	
-	public void setPerson_first_name(String firstName){
-		person_first_name=firstName;
-	}
-	public String getPerson_first_name(){
-		return person_first_name;
-	}
-	
-	public void setPerson_suffix(String suffix){
-		person_suffix=suffix;
-	}
-	public String getPerson_suffix(){
-		return person_suffix;
-	}
-	
-	public void setPerson_title(String title){
-		person_title=title;
-	}
-	public String getPerson_title(){
-		return person_title;
+	public void setGender(Gender gender){
+		this.gender=gender;
 	}
 	public void setAddress(Address address){
 		this.address=address;
@@ -194,13 +150,9 @@ public class Person
 	public boolean getEmployed(){
 		return isEmployed;
 	}
-	@Transient
-	public String getFullName(){
-		return person_first_name + " " + person_middle_name + " " + person_last_name;
-	}
 	
 	@Override
 	public String toString(){
-		return MessageFormat.format("{0} Name: {1} {2} {3} {4} {5} \n\tAddress: {6} \n\tGWA:{7} \n\tBirthday: {8}\n\tEmployed: {9}\tDate Hired: {10}", this.person_id, this.person_first_name, this.person_middle_name, this.person_last_name, this.person_suffix, this.person_title, this.address, this.person_gwa, this.birthday, this.isEmployed, this.date_hired);
+		return MessageFormat.format("{0} Name: {1}\n\tAddress: {2} \n\tGWA:{3} \n\tBirthday: {4}\n\tEmployed: {5}\tDate Hired: {6}", this.id, this.name, this.address, this.person_gwa, this.birthday, this.isEmployed, this.date_hired);
 	}
 }

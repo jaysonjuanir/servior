@@ -17,6 +17,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Transient;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -26,42 +28,34 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "contact")
-@Access(value=AccessType.FIELD)
-public class Contact{
-	@Id
-	//@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "contact_id", unique = true, nullable = false)
-	private int contact_id;
+public class Contact extends BaseEntity{
 	
+	
+	@Enumerated(EnumType.STRING)
 	@Column(name="contact_type")
-	private String contact_type;
+	private ContactType contact_type;
 	
 	@Column(name="contact_value")private String contact_value;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "person_id", nullable = false)
 	private Person person;
 
 	public Contact(){}
 
-	public Contact(String contact_type, String contact_value, Person person){
+	public Contact(ContactType contact_type, String contact_value, Person person){
 		this.contact_type = contact_type;
 		this.contact_value = contact_value;
 		this.person = person;
 	}
 	
-	public void setContact_id(int id){
-		this.contact_id=id;
-	}
-	public int getContact_id(){
-		return contact_id;
-	}
-	public String getContact_type(){
+	public ContactType getContact_type(){
 		return contact_type;
 	}
 
-	public void setContact_type(String type){
+	public void setContact_type(ContactType type){
 		this.contact_type = type;
 	}
 	public String getContact_value(){

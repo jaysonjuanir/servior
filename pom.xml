@@ -61,7 +61,21 @@
 				<artifactId>dao</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-		
+			<dependency>
+				<groupId>com.person</groupId>
+				<artifactId>dto</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.person</groupId>
+				<artifactId>util</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.person</groupId>
+				<artifactId>model</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>

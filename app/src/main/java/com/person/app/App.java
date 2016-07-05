@@ -11,6 +11,10 @@ import com.person.model.Person;
 import com.person.model.Address;
 import com.person.model.Roles;
 import com.person.model.Contact;
+import com.person.model.ContactType;
+import com.person.model.Gender;
+import com.person.model.Name;
+import com.person.dto.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -103,20 +107,20 @@ public class App
 		System.exit(0);
     }
 	public void listPeople(){
-		List <Person> listPeople  = srvc.getPeople();
+		List <PersonDto> listPeople  = srvc.getPeople();
 		srvc.printAllPeople(listPeople);
 	}
 	public void listPeopleByDateHiredInput()throws IOException{
-		List <Person> listPeople  = srvc.getPersonByDateHired();
+		List <PersonDto> listPeople  = srvc.getPersonByDateHired();
 		srvc.printAllPeople(listPeople);
 	}
 	public void listPeopleByLastNameInput()throws IOException{
-		List <Person> listPeople  = srvc.getPersonByLastName();
+		List <PersonDto> listPeople  = srvc.getPersonByLastName();
 		srvc.printAllPeople(listPeople);
 	}
 	public void listPeopleByGWAInput()throws IOException{
 		
-		List<Person> listPeople = srvc.getPersonByGWA();
+		List<PersonDto> listPeople = srvc.getPersonByGWA();
 		srvc.printAllPeople(listPeople);
 	}
 	public void createPersonInput()throws IOException{
@@ -155,7 +159,7 @@ public class App
 			
 			
 			
-			
+			Name name = new Name(firstName, middleName, lastName, suffix, title);
 			Address personAddress = new App().createPersonAddressInput();
 			
 			System.out.println("GWA: ");
@@ -163,7 +167,7 @@ public class App
 			
 			
 			
-			Person createdPerson = new Person(firstName, middleName, lastName, suffix, title, personAddress, gwa, null, roles, birthday, date_hired, isEmployed);
+			Person createdPerson = new Person(name, personAddress, gwa, null, roles, birthday, date_hired, isEmployed);
 			Set<Contact> contacts = new App().createPersonContacts();
 			contacts.forEach(a->{
 				a.setContact_person(createdPerson);
@@ -236,8 +240,8 @@ public class App
 		try{
 			System.out.println("Please enter a valid person id: ");
 			int personId = Integer.parseInt(br.readLine());
-			Person person = srvc.getPersonById(personId);
-			System.out.println("Person Found! Name: " +person.getFullName());
+			Person person = srvc.toEntity(srvc.getPersonById(personId));
+			System.out.println("Person Found! Name: " +person.getName());
 
 			
 			if(person.getEmployed()==true){
@@ -245,7 +249,8 @@ public class App
 				roles.add(new App().selectPersonRoleInput());
 
 				person.setRoles(roles);
-				srvc.executeUpdatedPerson(person);
+				
+				srvc.executeUpdatedPerson(srvc.toDto(person));
 			}
 			else{
 				System.out.println("PERSON NOT EMPLOYED YET!\n");
@@ -260,12 +265,12 @@ public class App
 		try{
 			System.out.println("Please enter a valid person id: ");
 			int personId = Integer.parseInt(br.readLine());
-			Person person = srvc.getPersonById(personId);
+			Person person = srvc.toEntity(srvc.getPersonById(personId));
 			
 			Set<Roles> roles = person.getRoles();
 			Set<Roles> updatedRoles = new HashSet<Roles>();
 			System.out.println("Begin display of person roles:");
-			System.out.println("Person Found! Name: "+ person.getFullName());
+			System.out.println("Person Found! Name: "+ person.getName());
 
 			roles.forEach(System.out::println);
 			Roles role = new App().selectPersonRoleInput();
@@ -282,7 +287,7 @@ public class App
 			
 			
 			person.setRoles(updatedRoles);
-			srvc.executeUpdatedPerson(person);
+			srvc.executeUpdatedPerson(srvc.toDto(person));
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			ex.printStackTrace();
 		}
@@ -311,16 +316,17 @@ public class App
 		try{
 			System.out.print("Enter a valid id of person: ");
 			int personId = Integer.parseInt(br.readLine());
-			Person tbUpdatePerson = srvc.getPersonById(personId);
-			System.out.println("First Name Update "+tbUpdatePerson.getPerson_first_name() + ": ");
+			PersonDto tbUpdatePerson = srvc.getPersonById(personId);	
+			NameDto tbUpdateName = tbUpdatePerson.getName();
+			System.out.println("First Name Update "+tbUpdateName.getPerson_first_name() + ": ");
 			String firstName = br.readLine();
-			System.out.println("Middle Name Update "+tbUpdatePerson.getPerson_middle_name() + ": ");
+			System.out.println("Middle Name Update "+tbUpdateName.getPerson_middle_name() + ": ");
 			String middleName = br.readLine();
-			System.out.println("Last Name Update "+tbUpdatePerson.getPerson_last_name() + ": ");
+			System.out.println("Last Name Update "+tbUpdateName.getPerson_last_name() + ": ");
 			String lastName = br.readLine();
-			System.out.println("Suffix Update "+tbUpdatePerson.getPerson_suffix() + ": ");
+			System.out.println("Suffix Update "+tbUpdateName.getPerson_suffix() + ": ");
 			String suffix = br.readLine();
-			System.out.println("Title Update "+tbUpdatePerson.getPerson_title() + ": ");
+			System.out.println("Title Update "+tbUpdateName.getPerson_title() + ": ");
 			String title = br.readLine();
 			System.out.println("GWA Update "+tbUpdatePerson.getPerson_GWA()+" : ");
 			double gwa = Double.parseDouble(br.readLine());
@@ -345,7 +351,7 @@ public class App
 				}
 			}
 			
-			Address tbUpdateAddress = tbUpdatePerson.getAddress();
+			AddressDto tbUpdateAddress = tbUpdatePerson.getAddress();
 			String promptUser = "";
 			while(!( promptUser.equalsIgnoreCase("y") || promptUser.equalsIgnoreCase("n") )){
 				System.out.print("Do you want to edit address? [Y/n] \t");
@@ -355,7 +361,7 @@ public class App
 			}
 			
 			
-			Person updatedPerson = srvc.updatePerson(tbUpdatePerson, firstName, middleName, lastName, suffix, title, gwa, tbUpdateAddress, birthday, date_hired, isEmployed);
+			PersonDto updatedPerson = srvc.updatePerson(tbUpdatePerson, firstName, middleName, lastName, suffix, title, gwa, tbUpdateAddress, birthday, date_hired, isEmployed);
 			srvc.executeUpdatedPerson(updatedPerson);
 			
 			
@@ -366,8 +372,8 @@ public class App
 			
 		}
 	}
-	public Address updateAddressInput(Address tbUpdateAddress){
-		Address updatedAddress = tbUpdateAddress;
+	public AddressDto updateAddressInput(AddressDto tbUpdateAddress){
+		AddressDto updatedAddress = tbUpdateAddress;
 		try{
 			System.out.println("Street Number Update "+tbUpdateAddress.getAddress_street_number() + ": ");
 			String streetNumber = br.readLine();
@@ -389,12 +395,12 @@ public class App
 	public Contact createPersonContactInput()throws IOException{ //for creating person included
 		
 		String type = "";
-		String contactType = "";
+		ContactType contactType = null;
 		while(!(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))){
 			System.out.println("Choose Type [Landline(L) Mobile Number(M) E-mail(E)]: {Enter capital of the letter only}" );
 			type = br.readLine();
 			if(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))
-				contactType = type.equalsIgnoreCase("L")?"landline":type.equalsIgnoreCase("M")?"mobile":"email";
+				contactType = new App().convertToContactTypeEnum(type);
 		}
 		System.out.println("Enter Value: ");
 		String value = br.readLine();
@@ -418,19 +424,19 @@ public class App
 		try{
 			System.out.println("Please enter a valid person id: ");
 			int personId = Integer.parseInt(br.readLine());
-			Person personContact = srvc.getPersonById(personId);
+			Person personContact = srvc.toEntity(srvc.getPersonById(personId));
 			
 			String type = "";
-			String contactType = "";
+			ContactType contactType = null;
 			String value = "";
-			personContact.getPerson_contact().forEach(c->{System.out.println("Contact ID: "+c.getContact_id() + " " + c);});
+			personContact.getPerson_contact().forEach(c->{System.out.println("Contact ID: "+c.getId() + " " + c);});
 			try{
 				type = br.readLine();
 				while(!(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))){
 					System.out.println("Choose Type [Landline(L) Mobile Number(M) E-mail(E)]: {Enter capital of the letter only}" );
 					type = br.readLine();
 					if(type.equalsIgnoreCase("m") || type.equalsIgnoreCase("l") || type.equalsIgnoreCase("e"))
-						contactType = type.equalsIgnoreCase("L")?"landline":type.equalsIgnoreCase("M")?"mobile":"email";
+						contactType = new App().convertToContactTypeEnum(type);
 				}
 				System.out.println("Enter "+contactType+" value: ");
 				value = br.readLine();
@@ -447,15 +453,15 @@ public class App
 	public void updateContactsInput()throws IOException{
 		System.out.println("Please enter a valid person id: ");
 		int personId = Integer.parseInt(br.readLine());
-		Person personContact = srvc.getPersonById(personId);
+		Person personContact = srvc.toEntity(srvc.getPersonById(personId));
 		Set<Contact> contactSet = personContact.getPerson_contact();
 		String promptUser="";
 		while(!promptUser.equalsIgnoreCase("n")){
-			System.out.println("Person Found! Name: " +personContact.getFullName());
+			System.out.println("Person Found! Name: " +personContact.getName());
 			System.out.println("Continue Updating Contacts? [Y/n]");
 			promptUser = br.readLine();
 			if(promptUser.equalsIgnoreCase("y")){
-				contactSet.forEach(c->{System.out.println(c.getContact_id() + " " + c);});
+				contactSet.forEach(c->{System.out.println(c.getId() + " " + c);});
 				System.out.println("Enter contact id: ");
 				try{
 					int contact_id = Integer.parseInt(br.readLine());
@@ -485,14 +491,14 @@ public class App
 	public void deleteContactsInput()throws IOException{
 		System.out.println("Please enter a valid person id: ");
 		int personId = Integer.parseInt(br.readLine());
-		Person personContact = srvc.getPersonById(personId);
+		Person personContact = srvc.toEntity(srvc.getPersonById(personId));
 		Set<Contact> contactSet = personContact.getPerson_contact();
 		String promptUser="";
 		while(!promptUser.equalsIgnoreCase("n")){
 			System.out.println("Continue Deleting Contact? [Y/n]");
 			promptUser = br.readLine();
 			if(promptUser.equalsIgnoreCase("y")){
-				contactSet.forEach(c->{System.out.println(c.getContact_id() + " " + c);});
+				contactSet.forEach(c->{System.out.println(c.getId() + " " + c);});
 				System.out.println("Enter contact id: ");
 				try{
 					int contact_id = Integer.parseInt(br.readLine());
@@ -511,7 +517,7 @@ public class App
 		try{
 			System.out.print("Enter a valid id of person: ");
 			int personId = Integer.parseInt(br.readLine());
-			Person tbDeletePerson = srvc.getPersonById(personId);
+			Person tbDeletePerson = srvc.toEntity(srvc.getPersonById(personId));
 			srvc.deletePerson(tbDeletePerson);
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
@@ -519,6 +525,27 @@ public class App
 			
 		}
 	}
+	
+	public Gender convertToGenderEnum(String val){
+		if(val.equalsIgnoreCase("m")){
+			return Gender.MALE;
+		}
+		else{
+			return Gender.FEMALE;
+		}
+	}
+	public ContactType convertToContactTypeEnum(String val){
+		if(val.equalsIgnoreCase("m")){
+			return ContactType.mobile;
+		}
+		else if(val.equalsIgnoreCase("l")){
+			return ContactType.landline;
+		}
+		else{
+			return ContactType.email;
+		}
+	}
+	
 	//-----------------------------------ROLE---------------------------------------------------------
 	public void createRoleInput() throws IOException{
 		try{

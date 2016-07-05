@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.person</groupId>
-			<artifactId>dao</artifactId>
+			<artifactId>model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -33,10 +33,7 @@
 	
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
           		<artifactId>maven-compiler-plugin</artifactId>
@@ -66,31 +63,31 @@
 				</configuration>
 			</plugin> 	
 			<plugin>
-    <artifactId>maven-resources-plugin</artifactId>
-    <executions>
-        <execution>
-            <id>copy-appCtx</id>
-            <phase>generate-resources</phase>
-            <goals>
-                <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-                <outputDirectory>${project.build.directory}/app/src/resource</outputDirectory>
-                <overwrite>true</overwrite>
-                <resources>
-                    <resource>
-                        <directory>../infra/src/resource</directory>
-                        <includes>
-                             <include>hibernate.cfg.xml</include>
-							<include>Person.hbm.xml</include>
-							<include>person.sql</include>
-                        </includes>
-                    </resource>
-                </resources>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-appCtx</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/app/src/resource</outputDirectory>
+							<overwrite>true</overwrite>
+							<resources>
+								<resource>
+									<directory>../infra/src/resource</directory>
+									<includes>
+										 <include>hibernate.cfg.xml</include>
+										<include>Person.hbm.xml</include>
+										<include>person.sql</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

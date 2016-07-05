@@ -34,7 +34,7 @@ public class RolesDao
 		session = UtilSession.getSessionFactory().openSession();
 		List<Roles> roles = null;
 		try{
-			roles = session.createCriteria(Roles.class).addOrder( Order.asc("role_id") ).setCacheable(true).list();
+			roles = session.createCriteria(Roles.class).addOrder( Order.asc("id") ).setCacheable(true).list();
 			//session.close();
 			//session.flush();
 		}catch(HibernateException hex){

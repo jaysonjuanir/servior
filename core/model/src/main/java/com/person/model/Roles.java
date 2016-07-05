@@ -27,13 +27,11 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "roles")
-public class Roles 
+public class Roles extends BaseEntity
 {
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "role_id", unique = true, nullable = false)
-    private int role_id;
+	
 	@Column(name = "role_type")
 	private String role_type;
 	
@@ -43,12 +41,6 @@ public class Roles
 		role_type=type;
 	}
 	
-	public void setRole_id(int id){
-		role_id = id;
-	}
-	public int getRole_id(){
-		return role_id;
-	}
 	
 	public void setRole_type(String type){
 		role_type=type;
@@ -58,6 +50,6 @@ public class Roles
 	}
 	@Override
 	public String toString(){
-		return MessageFormat.format("\tID: {0} Roles: {1} ", this.role_id, this.role_type);
+		return MessageFormat.format("\tID: {0} Roles: {1} ", this.id, this.role_type);
 	}
 }

@@ -12,9 +12,13 @@ import com.person.dao.RolesDao;
 import com.person.model.Roles;
 
 import com.person.model.Address;
+import com.person.model.Name;
 
 import com.person.dao.ContactDao;
 import com.person.model.Contact;
+import com.person.model.ContactType;
+
+import com.person.dto.*;
 
 import com.person.util.UtilSession;
 import java.util.List;
@@ -28,13 +32,13 @@ public class Service
     PersonDao p = new PersonDao();
 	ContactDao c = new ContactDao();
 	
-	public void printAllPeople(List<Person> people){
+	public void printAllPeople(List<PersonDto> people){
 		people.forEach((ppl) ->{
 			System.out.println(ppl);
 			ppl.getPerson_contact().forEach(System.out::println);
 			System.out.println();
 			ppl.getRoles().forEach(System.out::println);
-			System.out.println();
+			//System.out.println();
 		});
 		UtilSession.log();
 	}
@@ -44,7 +48,7 @@ public class Service
 		p.addPerson(newPerson);
 		
 	}
-	public void executeUpdatedPerson(Person updatedPerson){
+	public void executeUpdatedPerson(PersonDto updatedPerson){
 		p.updatePerson(updatedPerson);
 		
 	}
@@ -56,30 +60,38 @@ public class Service
 		p.deletePerson(deletePerson);
 		
 	}
-	public Person getPersonById(int personId){
+	public PersonDto toDto(Person person){
+		return p.toDto(person);
+	}
+	public Person toEntity(PersonDto personDto){
+		return p.toEntity(personDto);
+	}
+	public PersonDto getPersonById(int personId){
 		return p.getPersonById(personId);
 	}
 	public Address createAddress(String streetNumber, String barangay, String city, String zipCode){
 		return new Address(streetNumber, barangay, city, zipCode);
 	}
-	public Contact createContact(String type, String value){
+	public Contact createContact(ContactType type, String value){
 		Contact contact = new Contact();
 		contact.setContact_type(type);
 		contact.setContact_value(value);
 		return contact;
 	}
-	public Person updatePerson(Person tbUpdatePerson, String firstName, String middleName, String lastName, String suffix, String title, double gwa, Address address, Date birthday, Date date_hired, boolean employed){
-		Person updatedPerson = tbUpdatePerson;
+	public PersonDto updatePerson(PersonDto tbUpdatePerson, String firstName, String middleName, String lastName, String suffix, String title, double gwa, AddressDto address, Date birthday, Date date_hired, boolean employed){
+		PersonDto updatedPerson = tbUpdatePerson;
+		NameDto updatedName = updatedPerson.getName();
 		if(!firstName.equals(""))//validation if empty
-			updatedPerson.setPerson_first_name(firstName);
+			updatedName.setPerson_first_name(firstName);
 		if(!middleName.equals(""))
-			updatedPerson.setPerson_middle_name(middleName);
+			updatedName.setPerson_middle_name(middleName);
 		if(!lastName.equals(""))
-			updatedPerson.setPerson_last_name(lastName);
+			updatedName.setPerson_last_name(lastName);
 		if(!suffix.equals(""))
-			updatedPerson.setPerson_suffix(suffix);
+			updatedName.setPerson_suffix(suffix);
 		if(!title.equals(""))
-			updatedPerson.setPerson_title(title);
+			updatedName.setPerson_title(title);
+		updatedPerson.setName(updatedName);
 		updatedPerson.setPerson_GWA(gwa);
 		updatedPerson.setBirthday(birthday);
 		updatedPerson.setDate_hired(date_hired);
@@ -87,8 +99,8 @@ public class Service
 		updatedPerson.setAddress(address);
 		return updatedPerson;
 	}
-	public Address updateAddress(Address tbUpdateAddress, String streetNumber, String barangay, String city, String zipcode){
-		Address updatedAddress = tbUpdateAddress;
+	public AddressDto updateAddress(AddressDto tbUpdateAddress, String streetNumber, String barangay, String city, String zipcode){
+		AddressDto updatedAddress = tbUpdateAddress;
 		if(!streetNumber.equals(""))
 			updatedAddress.setAddress_street_number(streetNumber);
 		if(!barangay.equals(""))
@@ -99,27 +111,27 @@ public class Service
 			updatedAddress.setAddress_zipcode(zipcode);
 		return updatedAddress;
 	}
-	public List<Person> getPersonByLastName(){
+	public List<PersonDto> getPersonByLastName(){
 		return p.getPersonByLastName();
 	}
-	public List<Person> getPersonByGWA(){
+	public List<PersonDto> getPersonByGWA(){
 		return p.getPersonByGWA();
 	}
-	public List<Person> getPersonByDateHired(){
+	public List<PersonDto> getPersonByDateHired(){
 		return p.getPersonByDateHired();
 	}
-	public List<Person> getPeople(){
+	public List<PersonDto> getPeople(){
 		return p.getPeople();
 	}
 	
 	public List<Contact> getContactByPersonId(int personId){
-		Person person = p.getPersonById(personId);
-		return c.getContactByPerson(person);
+		PersonDto person = p.getPersonById(personId);
+		return c.getContactByPerson(p.toEntity(person));
 	}
 	public Contact getContactById(int contact_id){
 		return c.getContactById(contact_id);
 	}
-	public Contact createContact(String type, String value, Person personContact){
+	public Contact createContact(ContactType type, String value, Person personContact){
 		return new Contact(type, value, personContact);
 	}
 	public void deleteContact(Contact contact){
