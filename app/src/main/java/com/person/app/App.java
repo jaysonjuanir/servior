@@ -26,7 +26,7 @@ public class App
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static Scanner sc = new Scanner(System.in);
 	static Service srvc = new Service();
-    public static void main( String[] args )
+    /*public static void main( String[] args )
     {
 		
 	//for updating.....
@@ -105,7 +105,7 @@ public class App
 		}
 		System.out.println("lol");
 		System.exit(0);
-    }
+    }*/
 	public void listPeople(){
 		List <PersonDto> listPeople  = srvc.getPeople();
 		srvc.printAllPeople(listPeople);
