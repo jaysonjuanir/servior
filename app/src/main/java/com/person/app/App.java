@@ -181,7 +181,7 @@ public class App
 			
 			//createdPerson.setPerson_contact(contacts);
 			
-			srvc.executeCreatePerson(createdPerson);
+			srvc.executeCreatePerson(srvc.toDto(createdPerson));
 			
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
@@ -518,7 +518,7 @@ public class App
 			System.out.print("Enter a valid id of person: ");
 			int personId = Integer.parseInt(br.readLine());
 			Person tbDeletePerson = srvc.toEntity(srvc.getPersonById(personId));
-			srvc.deletePerson(tbDeletePerson);
+			srvc.deletePerson(srvc.toDto(tbDeletePerson));
 		}catch(NumberFormatException|IOException|NullPointerException ex){
 			System.out.print("ERROR! \t");
 			ex.printStackTrace();

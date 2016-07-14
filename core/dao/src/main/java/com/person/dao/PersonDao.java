@@ -26,10 +26,11 @@ public class PersonDao
 	//public PersonDao(){
 	//	utilSession = new UtilSession();	
 	//}
-    public void addPerson(Person person){
+    public void addPerson(PersonDto personDto){
 		//UtilSession utilSession = new UtilSession();
 		session = UtilSession.getSessionFactory().openSession();
 		session.beginTransaction();
+		Person person = toEntity(personDto);
 		session.save(person);
 		session.getTransaction().commit();
 		System.out.println("PERSON CREATED!!");
@@ -40,7 +41,7 @@ public class PersonDao
 		session = UtilSession.getSessionFactory().openSession();
 		List<Person> persons = null;
 		try{
-			persons = session.createCriteria(Person.class).setCacheable(true).setCacheRegion("person").list()	;
+			persons = session.createCriteria(Person.class).addOrder( Order.asc("id") ).setCacheable(true).setCacheRegion("person").list();
 			//session.close();
 			//session.flush();
 			//System.out.println(persons);
@@ -76,11 +77,12 @@ public class PersonDao
 			session.close();
 		}
 	}
-	public void deletePerson(Person deleteThisPerson){
+	public void deletePerson(PersonDto deleteThisPerson){
 		session=UtilSession.getSessionFactory().openSession();
 		try{
 			transac = session.beginTransaction();
-			session.delete(deleteThisPerson);
+			Person person = toEntity(deleteThisPerson);
+			session.delete(person);
 			transac.commit();
 			System.out.println("PERSON DELETED!!");
 		}catch(HibernateException hex){
@@ -182,7 +184,7 @@ public class PersonDao
 			personDto.setPerson_GWA(person.getPerson_GWA());
 			personDto.setAddress(addressDto);
 			personDto.setPerson_contact(contactDtos);
-			
+			personDto.setGender(person.getGender());
 			personDto.setId(person.getId());
 			
 			for(Roles r : person.getRoles()){
@@ -208,9 +210,6 @@ public class PersonDao
 			}
 			personDto.setPerson_contact(contactDtos);
 		}catch(Exception e){
-			
-			System.out.println("catched!");
-			e.printStackTrace();
 		}
 		
 		return personDto;
@@ -233,6 +232,7 @@ public class PersonDao
 			person.setEmployed(personDto.getEmployed());
 			person.setPerson_GWA(personDto.getPerson_GWA());
 			person.setAddress(address);
+			person.setGender(personDto.getGender());
 			person.setId(personDto.getId());
 			
 			for(RolesDto r : personDto.getRoles()){
@@ -260,9 +260,6 @@ public class PersonDao
 			person.setRoles(roles);
 			person.setPerson_contact(contacts);
 		}catch(Exception e){
-			
-			System.out.println("catched!");
-			e.printStackTrace();
 		}
 		
 		return person;

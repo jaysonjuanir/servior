@@ -6,12 +6,14 @@ package com.person.dao;
  */
 
 import com.person.util.UtilSession;
-import com.person.model.Contact;
-import com.person.model.Person;
+import com.person.model.*;
+import com.person.dto.ContactDto;
+import com.person.dto.PersonDto;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.Query;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -27,7 +29,33 @@ public class ContactDao
 		//UtilSession utilSession = new UtilSession();
 		session = UtilSession.getSessionFactory().openSession();
 		session.beginTransaction();
-		session.save(contact);
+		session.saveOrUpdate(contact);
+		session.getTransaction().commit();
+		session.close();
+	}
+	public void clearContact(int id){
+		session = UtilSession.getSessionFactory().openSession();
+		session.beginTransaction();
+		String hql = "delete Contact where person_id=:ID";
+		Query query = session.createQuery(hql);
+		query.setParameter("ID", id);
+
+		query.executeUpdate();
+		session.close();
+	}
+	public void addContactDto(ContactDto contact, Person person){
+		//UtilSession utilSession = new UtilSession();
+		session = UtilSession.getSessionFactory().openSession();
+		session.beginTransaction();
+		session.save(toEntity(contact,person));
+		session.getTransaction().commit();
+		session.close();
+	}
+	public void updateContactDto(ContactDto contact, Person person){
+		//UtilSession utilSession = new UtilSession();
+		session = UtilSession.getSessionFactory().openSession();
+		session.beginTransaction();
+		session.update(toEntity(contact,person));
 		session.getTransaction().commit();
 		session.close();
 	}
@@ -97,6 +125,24 @@ public class ContactDao
 		Contact thisContact = (Contact)session.get(Contact.class, id);
 		session.close();
 		return thisContact;
+	}
+	public Contact toEntity(ContactDto c, Person person){
+		
+			Contact contact = new Contact();
+			ContactType type=c.getContact_type();
+			
+			contact.setContact_type(type);
+			contact.setContact_value(c.getContact_value());
+			//PersonDto prs = new PersonDto();
+			//BeanUtils.copyProperties(prs, c.getContact_person());
+			contact.setContact_person(person);
+			contact.setId(c.getId());
+			
+			
+			//ContactDto contactDto = new ContactDto();
+			//BeanUtils.copyProperties(contactDto, c);
+		
+		return contact;
 	}
 	public void closeSessionFactory(){
 		UtilSession.closeSessionFactory();

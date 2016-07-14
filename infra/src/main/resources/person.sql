@@ -29,6 +29,13 @@ CREATE TABLE contact (
 	REFERENCES person(id) MATCH SIMPLE ON DELETE CASCADE
 );
 
+DROP TABLE if EXISTS roles CASCADE;
+CREATE TABLE roles (
+    id bigserial NOT NULL,
+    role_type varchar(250) NOT NULL,
+	CONSTRAINT role_pkey PRIMARY KEY (id)
+);
+
 DROP TABLE if EXISTS personrole CASCADE;
 CREATE TABLE personrole (
     person_id bigint NOT NULL,
@@ -40,9 +47,7 @@ CREATE TABLE personrole (
 	
 );
 
-DROP TABLE if EXISTS roles CASCADE;
-CREATE TABLE roles (
-    id bigserial NOT NULL,
-    role_type varchar(250) NOT NULL,
-	CONSTRAINT role_pkey PRIMARY KEY (id)
-);
+INSERT INTO roles VALUES(1,'dev');
+INSERT INTO roles VALUES(2,'qa');
+INSERT INTO roles VALUES(3,'ba');
+

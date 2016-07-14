@@ -11,6 +11,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import java.util.List;
 import java.util.ArrayList;
 public class RolesDao
@@ -78,6 +80,22 @@ public class RolesDao
 		Roles thisRole = (Roles)session.get(Roles.class, id);
 		session.close();
 		return thisRole;
+	}
+	public Roles getRoleByType(String type){
+		session = UtilSession.getSessionFactory().openSession();
+		Roles role = null;
+		try{
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Roles.class);
+			criteria.add(Restrictions.eq("role_type",type));
+			role = (Roles)criteria.uniqueResult();
+			session.getTransaction().commit();
+		}catch(HibernateException e){
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return role;
 	}
 	public void closeSessionFactory(){
 		UtilSession.closeSessionFactory();

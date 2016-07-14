@@ -1,4 +1,4 @@
-package com.person.model;
+package com.person.dto;
 
 /**
  * Hello world!
@@ -8,6 +8,7 @@ package com.person.model;
 import java.text.MessageFormat;
 import java.util.Set;
 import java.util.Date;
+import com.person.model.Gender;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -29,54 +30,34 @@ import javax.persistence.CascadeType;
 import javax.persistence.Table;
 import static javax.persistence.GenerationType.IDENTITY;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-@Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region="person")
-@Table(name="person")
-public class Person extends BaseEntity 
+public class PersonDto extends BaseEntityDto 
 {
 	
+	private NameDto name;
 	
-	@Embedded
-	private Name name;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "gender")
 	private Gender gender;
 	
-	@Embedded
-	private Address address;
+	private AddressDto address;
 	
-	@Column(name = "gwa")
 	private Double person_gwa;
 	
-	@Column(name = "person_birthday")
 	private Date birthday;
 	
-	@Column(name = "person_employed")
 	private boolean isEmployed;
 	
-	
-	@Column(name = "person_date_hired")
 	private Date date_hired;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL)
-	private Set<Contact> contact;
+	private Set<ContactDto> contact;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "personrole", joinColumns = {
-			@JoinColumn(name = "person_id", nullable = false, updatable = false) }, 
-			inverseJoinColumns = { @JoinColumn(name = "role_id", 
-					nullable = false, updatable = false) })
-	private Set<Roles> roles;
+	private Set<RolesDto> roles;
 	
 	
-	public Person(){}
+	public PersonDto(){}
 	
-	public Person( Name name, Address personAddress, double gwa, Set<Contact> contact, Set<Roles> roles, Date birthday, Date date_hired, boolean isEmployed){
+	public PersonDto( NameDto name, AddressDto personAddress, double gwa, Set<ContactDto> contact, Set<RolesDto> roles, Date birthday, Date date_hired, boolean isEmployed){
 		this.name = name;
 		address = personAddress;
 		person_gwa=gwa;
@@ -88,10 +69,10 @@ public class Person extends BaseEntity
 	}
 	
 	
-	public void setName(Name name){
+	public void setName(NameDto name){
 		this.name=name;
 	}
-	public Name getName(){
+	public NameDto getName(){
 		return this.name;
 	}
 	
@@ -101,10 +82,10 @@ public class Person extends BaseEntity
 	public void setGender(Gender gender){
 		this.gender=gender;
 	}
-	public void setAddress(Address address){
+	public void setAddress(AddressDto address){
 		this.address=address;
 	}
-	public Address getAddress(){
+	public AddressDto getAddress(){
 		return this.address;
 	}
 	
@@ -115,17 +96,17 @@ public class Person extends BaseEntity
 		return person_gwa;
 	}
 	
-	public void setPerson_contact(Set<Contact> contact){
+	public void setPerson_contact(Set<ContactDto> contact){
 		this.contact=contact;
 	}
-	public Set<Contact> getPerson_contact(){
+	public Set<ContactDto> getPerson_contact(){
 		return contact;
 	}
 	
-	public void setRoles(Set<Roles> roles){
+	public void setRoles(Set<RolesDto> roles){
 		this.roles=roles;	
 	}
-	public Set<Roles> getRoles(){
+	public Set<RolesDto> getRoles(){
 		return roles;
 	}
 	public Date getBirthday(){
@@ -155,6 +136,6 @@ public class Person extends BaseEntity
 	
 	@Override
 	public String toString(){
-		return MessageFormat.format("{0} Name: {1}\n\tAddress: {2} \n\tGWA:{3} \n\tBirthday: {4}\n\tEmployed: {5}\tDate Hired: {6}", this.id, this.name, this.address, this.person_gwa, this.birthday, this.isEmployed, this.date_hired);
+		return MessageFormat.format("{0} Name: {1}\n\tAddress: {2} Gender: {7}\n\tGWA:{3} \n\tBirthday: {4}\n\tEmployed: {5}\tDate Hired: {6}", this.id, this.name, this.address, this.person_gwa, this.birthday, this.isEmployed, this.date_hired, gender);
 	}
 }
