@@ -6,7 +6,7 @@
    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
    metadata-complete="false"
    version="3.1">
-  <display-name>Sample Servlet Example</display-name>
+  <display-name>Servlet Activity</display-name>
   
   
   <servlet>
@@ -30,52 +30,12 @@
   	<display-name>PersonServlet</display-name>
   	<description>Test session</description>
   	<servlet-class>com.person.web.PersonServlet</servlet-class>
-  	<!--Un-comment  below line if you want to instantiate and initialize the servlet during the servlet-container(tomcat) startup-->
-  	<!-- <load-on-startup>1</load-on-startup> -->
+  	
   </servlet>
 
   <servlet-mapping>
   	<servlet-name>PersonServlet</servlet-name>
   	<url-pattern>/PersonServlet</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-  	<servlet-name>AddContact</servlet-name>
-  	<display-name>AddContact</display-name>
-  	<description>Logout from session</description>
-  	<servlet-class>com.person.web.AddContact</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-  	<servlet-name>AddContact</servlet-name>
-  	<url-pattern>/Logout</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-  	<servlet-name>TestDataPlaceHolderServlet</servlet-name>
-  	<display-name>TestDataPlaceHolderServlet</display-name>
-  	<description>Test data stored in request, session and servlet context</description>
-  	<servlet-class>com.person.web.TestDataPlaceHolderServlet</servlet-class>
-  </servlet>
-  
-  
-  <servlet-mapping>
-  	<servlet-name>TestDataPlaceHolderServlet</servlet-name>
-  	<url-pattern>/testDataPlaceHolderServlet</url-pattern>
-  </servlet-mapping>
-  
-  
-  
-  <servlet>
-  	<servlet-name>DataPlaceHolderServlet</servlet-name>
-  	<display-name>DataPlaceHolderServlet</display-name>
-  	<description>Store data in request, session and servlet context</description>
-  	<servlet-class>com.person.web.DataPlaceHolderServlet</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-  	<servlet-name>DataPlaceHolderServlet</servlet-name>
-  	<url-pattern>/DataPlaceHolderServlet</url-pattern>
   </servlet-mapping>
   
   <jsp-config>

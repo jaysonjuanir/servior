@@ -32,11 +32,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.person</groupId>
-			<artifactId>app</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.person</groupId>
 			<artifactId>dto</artifactId>
 			<version>${project.version}</version>
 		</dependency>
