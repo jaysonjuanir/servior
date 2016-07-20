@@ -8,14 +8,14 @@
 
 <html>
 	<head>
-		<title>index</title>
+		<title>Main Page</title>
 	</head>
 	<body>
 		<div>
 			<div class="row">
 				<div class="column column-6" align="center">
-					<a href="/PersonServlet">Add Person</a>
-					
+					<a href="${pageContext.request.contextPath}/PersonServlet">Add Person</a>
+					<a href="${pageContext.request.contextPath}/ViewRoles">Roles</a>
 					
 					<form action="${pageContext.request.contextPath}/MainPage" method="get">
 					  <input type="radio" name="sort" value="byId" checked="checked" > By ID<br>

@@ -26,9 +26,9 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>javax.servlet.jsp.jstl</groupId>
-			<artifactId>javax.servlet.jsp.jstl-api</artifactId>
-			<version>1.2.1</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.person</groupId>
@@ -71,6 +71,7 @@
 								<directory>../infra/src/resource</directory>
 								<includes>
 									 <include>hibernate.cfg.xml</include>
+									<include>ehcache.xml</include>	
 									<include>Person.hbm.xml</include>
 									<include>person.sql</include>
 								</includes>

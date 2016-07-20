@@ -37,6 +37,19 @@
   	<servlet-name>PersonServlet</servlet-name>
   	<url-pattern>/PersonServlet</url-pattern>
   </servlet-mapping>
+	
+  <servlet>
+  	<servlet-name>ViewRoles</servlet-name>
+  	<display-name>ViewRoles</display-name>
+  	<description>View all Roles</description>
+  	<servlet-class>com.person.web.ViewRoles</servlet-class>
+  	
+  </servlet>
+
+  <servlet-mapping>
+  	<servlet-name>ViewRoles</servlet-name>
+  	<url-pattern>/ViewRoles</url-pattern>
+  </servlet-mapping>
   
   <jsp-config>
     <jsp-property-group>

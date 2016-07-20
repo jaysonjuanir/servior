@@ -13,6 +13,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Projections;
@@ -41,7 +42,9 @@ public class PersonDao
 		session = UtilSession.getSessionFactory().openSession();
 		List<Person> persons = null;
 		try{
-			persons = session.createCriteria(Person.class).addOrder( Order.asc("id") ).setCacheable(true).setCacheRegion("person").list();
+			persons = session.createCriteria(Person.class).addOrder( Order.asc("id") )
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+				.setCacheable(true).setCacheRegion("person").list();
 			//session.close();
 			//session.flush();
 			//System.out.println(persons);
@@ -103,7 +106,9 @@ public class PersonDao
 			//Query query = session.createQuery(hql);
 			//query.setParameter("id",1);
 			
-			people = session.createCriteria(Person.class).addOrder( Order.asc("name.person_last_name") ).setCacheable(true).setCacheRegion("person").list();
+			people = session.createCriteria(Person.class).addOrder( Order.asc("name.person_last_name") )
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+				.setCacheable(true).setCacheRegion("person").list();
 			//people = query.setCacheable(true).list();
 		}catch(RuntimeException e){
 			e.printStackTrace();
@@ -126,7 +131,9 @@ public class PersonDao
 			Query query = session.createQuery(hql);
 			query.setParameter("gwa",gwa);
 			persons = query.setCacheable(true).list();*/
-			people = session.createCriteria(Person.class).addOrder( Order.asc("person_gwa") ).setCacheable(true).setCacheRegion("person").list();
+			people = session.createCriteria(Person.class).addOrder( Order.asc("person_gwa") )
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+				.setCacheable(true).setCacheRegion("person").list();
 		}catch(RuntimeException e){
 			e.printStackTrace();
 		}finally{
@@ -148,7 +155,9 @@ public class PersonDao
 			Query query = session.createQuery(hql);
 			query.setParameter("gwa",gwa);
 			persons = query.setCacheable(true).list();*/
-			people = session.createCriteria(Person.class).addOrder( Order.asc("date_hired") ).add( Restrictions.isNotNull("date_hired") ).setCacheable(true).setCacheRegion("person").list();
+			people = session.createCriteria(Person.class).addOrder( Order.asc("date_hired") )
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+				.setCacheable(true).setCacheRegion("person").list();
 		}catch(RuntimeException e){
 			e.printStackTrace();
 		}finally{

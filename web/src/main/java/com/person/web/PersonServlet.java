@@ -6,20 +6,11 @@ import java.io.PrintWriter;
 import com.person.service.*;
 import com.person.dto.*;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 /**
  * Servlet implementation class SessionServlet
- */
-/**
- * @author preetham
- *
  */
 public class PersonServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -44,6 +35,7 @@ public class PersonServlet extends HttpServlet {
 	 */
 	public void destroy() {
 		System.out.println("PersonServlet \"Destroy\" method called");
+		new Service().endProgram();
 	}
 
 
@@ -77,7 +69,7 @@ public class PersonServlet extends HttpServlet {
 		String id = request.getParameter("id");
 		PersonDto person = new Service().getPersonById(Integer.parseInt(id));
 		new Service().deletePerson(person);
-		response.sendRedirect("/MainPage?delete=SUCCESS");
+		response.sendRedirect(request.getContextPath()+"/MainPage?delete=SUCCESS");
 		// //Get the exisiting session, if session doesn't exist it will return null
 		// HttpSession session = request.getSession(false);
 		// if(session!=null)

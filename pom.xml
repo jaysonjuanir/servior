@@ -22,7 +22,6 @@
 	</modules>
 	<dependencyManagement>
 		<dependencies>
-			
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
@@ -79,7 +78,6 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.4-1206-jdbc42</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -115,7 +113,25 @@
 					<artifactId>jetty-maven-plugin</artifactId>
 					<version>9.2.15.v20160210</version>
 				</plugin>
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<configuration>
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+				  	<archive>
+      				<addMavenDescriptor>true</addMavenDescriptor>
+					</archive>
+				</configuration>
+			</plugin>
+
+		</plugins>
 	</build>
 </project>
